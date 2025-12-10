@@ -217,12 +217,12 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <Gauge className="w-5 h-5" />
             Mileage History
           </CardTitle>
-          <Badge variant="secondary" className="gap-1">
+          <Badge variant="secondary" className="gap-1 w-fit">
             <TrendingUp className="w-3 h-3" />
             {totalMileage.toLocaleString()} mi tracked
           </Badge>
@@ -232,7 +232,7 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
       <CardContent className="space-y-4">
         {/* Mileage Summary - Moved to top and made compact */}
         {recordsWithMileage.length > 1 && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Flag className="w-5 h-5 text-blue-600" />
@@ -275,7 +275,7 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
               <CheckCircle className="w-4 h-4" />
               Component Status
             </h4>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {componentStatus.map((status) => {
                 const isUrgent = status.serviceUrgent
                 const percentage = Math.min(100, (status.mileageSinceService / status.recommendedInterval) * 100)
