@@ -275,8 +275,8 @@ export default function HistoryPage() {
           {isLoading ? (
             <div className="min-h-[50vh] flex items-center justify-center">
               <div className="text-center max-w-xs w-full px-6">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Car className="w-8 h-8 text-primary" />
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Car className="w-8 h-8 text-primary-foreground" />
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
@@ -304,8 +304,8 @@ export default function HistoryPage() {
                   >
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                          <Car className="w-6 h-6 text-primary" />
+                        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                          <Car className="w-6 h-6 text-primary-foreground" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-lg">
@@ -333,8 +333,8 @@ export default function HistoryPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-xs w-full px-6">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Car className="w-8 h-8 text-primary" />
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <Car className="w-8 h-8 text-primary-foreground" />
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
             <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />

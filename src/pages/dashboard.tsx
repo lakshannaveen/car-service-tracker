@@ -138,8 +138,8 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-xs w-full px-6">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Car className="w-8 h-8 text-primary" />
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <Car className="w-8 h-8 text-primary-foreground" />
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
             <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
@@ -175,8 +175,8 @@ export default function DashboardPage() {
         {isLoading ? (
           <div className="min-h-[50vh] flex items-center justify-center">
             <div className="text-center max-w-xs w-full px-6">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Car className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Car className="w-8 h-8 text-primary-foreground" />
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
