@@ -70,7 +70,14 @@ export default function AddServicePage() {
       
       // If vehicles are loading, show loading
       if (isLoading) {
-          return <div className="text-center py-12">Loading...</div>
+          return (
+              <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                      <p className="text-muted-foreground">Loading vehicle...</p>
+                  </div>
+              </div>
+          )
       }
 
       // If vehicle not found (and not loading), show error or redirect
@@ -150,7 +157,12 @@ export default function AddServicePage() {
 
       <main className="container mx-auto px-4 py-6">
         {isLoading ? (
-          <div className="text-center py-12">Loading vehicles...</div>
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading vehicles...</p>
+            </div>
+          </div>
         ) : vehicles.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">No vehicles found. Add a vehicle first.</p>

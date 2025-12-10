@@ -3,11 +3,21 @@ import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Car, History, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function Navbar() {
   const location = useLocation()
   const pathname = location.pathname
   const { user, logout } = useAuth()
+
+  // Get user initials for avatar
+  const getUserInitials = (name: string) => {
+    const names = name.split(" ")
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase()
+    }
+    return name.substring(0, 2).toUpperCase()
+  }
 
   return (
     <header className="hidden md:block bg-white border-b border-border sticky top-0 z-40">
@@ -27,21 +37,16 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           {user ? (
             <>
-              <div className="text-sm text-muted-foreground">
-                Welcome, {user.fullName}
-              </div>
+              <Avatar className="w-10 h-10 border-2 border-primary/20">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-white font-semibold">
+                  {getUserInitials(user.fullName)}
+                </AvatarFallback>
+              </Avatar>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 onClick={logout}
-                className="
-                  flex items-center gap-2 
-                  text-muted-foreground 
-                  bg-transparent border-transparent 
-                  hover:text-red-600 
-                  hover:bg-transparent 
-                  hover:border-transparent
-                "
+                className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 rounded-lg transition-all"
               >
                 <LogOut className="w-4 h-4" />
                 Sign out
