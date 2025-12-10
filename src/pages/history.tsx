@@ -357,20 +357,14 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8">
       <header className="md:hidden bg-card border-b border-border sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold">
-              {vehicle.make} {vehicle.model}
-            </h1>
-            <p className="text-sm text-muted-foreground">{vehicle.licensePlate}</p>
+        <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
+          {/* REMOVED: Car name and license number */}
+          <div>
+            <Button size="sm" onClick={() => navigate(`/add-service/${vehicleId}`)} className="gap-2 float-right">
+              <Plus className="w-4 h-4" />
+              Add Service
+            </Button>
           </div>
-          <Button size="sm" onClick={() => navigate(`/add-service/${vehicleId}`)} className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Service
-          </Button>
         </div>
       </header>
 
