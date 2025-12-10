@@ -375,56 +375,58 @@ export default function HistoryPage() {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="grid gap-6 md:grid-cols-3 mb-8">
-          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100/50 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <p className="text-sm font-medium text-blue-700 mb-1">Total Services</p>
-                <p className="text-3xl font-bold text-gray-900">{records.length}</p>
-              </div>
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
-              </div>
+        <div className="grid gap-4 md:grid-cols-3 mb-8">
+          {/* Total Services */}
+          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-blue-600" />
             </div>
-            <div className="w-full bg-blue-200 rounded-full h-1">
-              <div
-                className="bg-blue-600 h-1 rounded-full transition-all duration-500"
-                style={{ width: `${Math.min((records.length / 20) * 100, 100)}%` }}
-              ></div>
+            <div>
+              <div className="text-xs font-medium text-muted-foreground mb-1">Total Services</div>
+              <div className="text-3xl font-bold text-gray-900">{records.length}</div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-blue-100 rounded-full h-1">
+                <div
+                  className="bg-blue-500 h-1 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min((records.length / 20) * 100, 100)}%` }}
+                ></div>
+              </div>
             </div>
           </div>
 
-          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100/50 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <p className="text-sm font-medium text-green-700 mb-1">Total Spent</p>
-                <p className="text-3xl font-bold text-gray-900">Rs. {totalCost.toFixed(2)}</p>
-              </div>
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-green-600" />
-              </div>
+          {/* Total Spent */}
+          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-green-600" />
             </div>
-            <div className="text-xs text-green-600 font-medium">Maintenance budget</div>
+            <div>
+              <div className="text-xs font-medium text-muted-foreground mb-1">Total Spent</div>
+              <div className="text-3xl font-bold text-gray-900">Rs. {totalCost.toFixed(2)}</div>
+            </div>
+            <div className="mt-4 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <span className="text-xs text-green-700 font-medium">Maintenance budget</span>
+            </div>
           </div>
 
-          <div className="bg-linear-to-br from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100/50 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <p className="text-sm font-medium text-orange-700 mb-1">Last Service</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {records.length > 0
-                    ? new Date(records[0].serviceDate).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "N/A"}
-                </p>
-              </div>
-              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-orange-600" />
+          {/* Last Service */}
+          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+            <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <div className="text-xs font-medium text-muted-foreground mb-1">Last Service</div>
+              <div className="text-3xl font-bold text-gray-900">
+                {records.length > 0
+                  ? new Date(records[0].serviceDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "N/A"}
               </div>
             </div>
-            <div className="text-xs text-orange-600 font-medium">
+            <div className="mt-4 text-xs text-orange-600 font-medium">
               {records.length > 0
                 ? `${Math.floor(
                     (new Date().getTime() - new Date(records[0].serviceDate).getTime()) /
