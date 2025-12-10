@@ -303,18 +303,32 @@ export default function HistoryPage() {
                     onClick={() => navigate(`/history/${vehicle.vehicleId}`)}
                   >
                     <CardContent className="p-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                          <Car className="w-6 h-6 text-primary-foreground" />
+                      {/* Horizontal line with car icon and details + button, as requested */}
+                      <div className="flex items-center justify-between border-b border-border pb-3 mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                            <Car className="w-6 h-6 text-primary-foreground" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-lg">
+                              {vehicle.make} {vehicle.model}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">{vehicle.licensePlate}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-lg">
-                            {vehicle.make} {vehicle.model}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">{vehicle.licensePlate}</p>
-                        </div>
+                        <Button
+                          size="sm"
+                          className="gap-2"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/add-service/${vehicle.vehicleId}`)
+                          }}
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add Service
+                        </Button>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
                         <Calendar className="w-4 h-4" />
                         <span>Year: {vehicle.year}</span>
                       </div>
@@ -358,9 +372,18 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-background pb-20 md:pb-8">
       <header className="md:hidden bg-card border-b border-border sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
-          {/* REMOVED: Car name and license number */}
-          <div>
-            <Button size="sm" onClick={() => navigate(`/add-service/${vehicleId}`)} className="gap-2 float-right">
+          <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
+            <div>
+              <h1 className="text-2xl font-bold">
+                {vehicle.make} {vehicle.model}
+              </h1>
+              <p className="text-sm text-muted-foreground">{vehicle.licensePlate}</p>
+            </div>
+            <Button
+              size="sm"
+              onClick={() => navigate(`/add-service/${vehicleId}`)}
+              className="gap-2"
+            >
               <Plus className="w-4 h-4" />
               Add Service
             </Button>
