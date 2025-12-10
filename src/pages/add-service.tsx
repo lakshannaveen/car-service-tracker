@@ -4,7 +4,7 @@ import { vehiclesApi, serviceRecordsApi, attachmentsApi, type Vehicle, type Serv
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card"
-import { Plus, ArrowLeft, Settings } from "lucide-react"
+import { Plus, ArrowLeft, Settings, Car } from "lucide-react"
 import { ServiceRecordForm } from "@/components/service-record-form"
 import { useToast } from "@/hooks/use-toast"
 
@@ -70,14 +70,18 @@ export default function AddServicePage() {
       
       // If vehicles are loading, show loading
       if (isLoading) {
-          return (
-              <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
-                      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                      <p className="text-muted-foreground">Loading vehicle...</p>
+              return (
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center max-w-xs w-full px-6">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Car className="w-8 h-8 text-primary" />
+                    </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+                    </div>
                   </div>
-              </div>
-          )
+                </div>
+              )
       }
 
       // If vehicle not found (and not loading), show error or redirect
@@ -158,9 +162,13 @@ export default function AddServicePage() {
       <main className="container mx-auto px-4 py-6">
         {isLoading ? (
           <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading vehicles...</p>
+            <div className="text-center max-w-xs w-full px-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Car className="w-8 h-8 text-primary" />
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+              </div>
             </div>
           </div>
         ) : vehicles.length === 0 ? (

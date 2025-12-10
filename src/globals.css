@@ -161,3 +161,19 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Car loading animation */
+@keyframes fillRight {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  70% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}

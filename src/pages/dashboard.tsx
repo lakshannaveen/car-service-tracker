@@ -8,7 +8,7 @@ import { VehicleFormDialog } from "@/components/vehicle-form-dialog"
 import { MobileNav } from "@/components/mobile-nav"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { Plus, LogOut } from "lucide-react"
+import { Plus, LogOut, Car } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 export default function DashboardPage() {
@@ -137,9 +137,13 @@ export default function DashboardPage() {
   if (authLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
+        <div className="text-center max-w-xs w-full px-6">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Car className="w-8 h-8 text-primary" />
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+            <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+          </div>
         </div>
       </div>
     )
@@ -169,9 +173,15 @@ export default function DashboardPage() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12">
-            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">Loading vehicles...</p>
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="text-center max-w-xs w-full px-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Car className="w-8 h-8 text-primary" />
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+              </div>
+            </div>
           </div>
         ) : vehicles.length === 0 ? (
           <div className="text-center py-12">
