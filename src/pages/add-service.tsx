@@ -96,32 +96,19 @@ export default function AddServicePage() {
 
       return (
           <div className="min-h-screen bg-background pb-20 md:pb-8">
-              <header className="bg-card border-b border-border sticky top-0 z-40">
-                <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-                        <ArrowLeft className="w-5 h-5" />
-                    </Button>
-                    <div>
-                        <h1 className="text-2xl font-bold">Add Service Record</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {vehicle?.make} {vehicle?.model}
-                        </p>
-                    </div>
-                </div>
-              </header>
-              <main className="container mx-auto px-4 py-6 max-w-2xl">
-                <Card>
+              <main className="container mx-auto px-3 py-6 max-w-xl">
+                <Card className="border-muted shadow-sm">
                   <CardHeader>
-                    <div className="bg-linear-to-r from-blue-50/50 to-purple-50/30 rounded-2xl p-6 mb-6 border border-blue-100/50 backdrop-blur-sm">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 bg-linear-to-br from-blue-500/10 to-purple-500/10 rounded-2xl flex items-center justify-center border border-blue-200/30">
-                          <Settings className="w-7 h-7 text-blue-600" />
+                    <div className="bg-primary/5 rounded-2xl p-4 mb-5 border border-primary/10 backdrop-blur-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/20">
+                          <Settings className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <CardTitle className="text-2xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                          <CardTitle className="text-xl font-semibold text-primary">
                             Service Details
                           </CardTitle>
-                          <CardDescription className="text-gray-600 font-medium mt-1">
+                          <CardDescription className="text-muted-foreground font-medium mt-0.5 text-sm">
                             Record a new service for this vehicle
                           </CardDescription>
                         </div>
