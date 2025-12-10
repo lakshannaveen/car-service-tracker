@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Car, History, LogOut } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function Navbar() {

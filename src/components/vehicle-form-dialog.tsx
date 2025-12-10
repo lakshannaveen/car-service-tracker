@@ -109,17 +109,17 @@ export function VehicleFormDialog({ open, onOpenChange, vehicle, onSubmit }: Veh
               />
             </div>
           </div>
-          <DialogFooter className="gap-4">
+          <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className="w-32 hover:text-red-600"
+              className="w-full sm:w-32 hover:text-red-600"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} className="w-32">
+            <Button type="submit" disabled={isLoading} className="w-full sm:w-32">
               {isLoading ? "Saving..." : vehicle ? "Update Vehicle" : "Add Vehicle"}
             </Button>
           </DialogFooter>

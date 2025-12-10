@@ -468,16 +468,16 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setBreakdownDialogOpen(false)}
-                      className="flex-1"
+                      className="flex-1 w-full"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" className="flex-1 gap-2">
+                    <Button type="submit" className="flex-1 w-full gap-2">
                       {editingBreakdownIndex !== null ? (
                         <>
                           <Check className="w-4 h-4" />
@@ -593,20 +593,20 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 pt-6">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-6">
         <Button
           type="button"
           variant="outline"
           onClick={onCancel}
           disabled={isLoading}
-          className="flex-1 h-12 border-2 hover:bg-muted/50 transition-all"
+          className="flex-1 w-full h-12 border-2 hover:bg-muted/50 transition-all"
         >
           Cancel
         </Button>
         <Button 
           type="submit" 
           disabled={isLoading} 
-          className="flex-1 h-12 bg-primary hover:bg-primary/90 text-white font-semibold transition-all gap-2"
+          className="flex-1 w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold transition-all gap-2"
         >
           {isLoading ? (
             <>
