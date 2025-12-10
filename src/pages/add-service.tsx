@@ -76,8 +76,8 @@ export default function AddServicePage() {
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Car className="w-8 h-8 text-primary" />
                     </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                        <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                          <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
                     </div>
                   </div>
                 </div>
@@ -167,7 +167,7 @@ export default function AddServicePage() {
                 <Car className="w-8 h-8 text-primary" />
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+                <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
               </div>
             </div>
           </div>

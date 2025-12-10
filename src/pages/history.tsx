@@ -279,7 +279,7 @@ export default function HistoryPage() {
                   <Car className="w-8 h-8 text-primary" />
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+                  <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
                 </div>
               </div>
             </div>
@@ -337,7 +337,7 @@ export default function HistoryPage() {
             <Car className="w-8 h-8 text-primary" />
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div className="h-full bg-primary rounded-full animate-[fillRight_1.2s_ease-in-out_infinite]" />
+            <div className="h-full bg-primary rounded-full animate-[fillRight_1s_linear_infinite]" />
           </div>
         </div>
       </div>
