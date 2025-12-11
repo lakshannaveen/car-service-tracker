@@ -500,7 +500,8 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
 
         {costBreakdowns.length > 0 ? (
           <CardContent className="space-y-4">
-            <div className="border-2 border-muted/30 rounded-lg overflow-hidden">
+            {/* Desktop Table View */}
+            <div className="hidden md:block border-2 border-muted/30 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/30 hover:bg-muted/30">
@@ -562,6 +563,67 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                   ))}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3">
+              {costBreakdowns.map((breakdown, index) => (
+                <div key={index} className="border-2 border-muted/30 rounded-lg p-4 space-y-3 bg-card">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm truncate">{breakdown.itemDescription}</h4>
+                      <Badge 
+                        variant="outline" 
+                        className={`mt-2 text-xs
+                          ${breakdown.itemCategory === "Labor" ? "border-blue-200 bg-blue-50 text-blue-700" :
+                            breakdown.itemCategory === "Parts" ? "border-green-200 bg-green-50 text-green-700" :
+                            breakdown.itemCategory === "Fluids" ? "border-purple-200 bg-purple-50 text-purple-700" :
+                            "border-gray-200 bg-gray-50 text-gray-700"}
+                        `}
+                      >
+                        {breakdown.itemCategory}
+                      </Badge>
+                    </div>
+                    <div className="flex gap-1 flex-shrink-0">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => handleEditBreakdown(index)}
+                        title="Edit"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={() => handleDeleteBreakdown(index)}
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-2 pt-2 border-t">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Qty</p>
+                      <p className="text-sm font-medium">{breakdown.quantity}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Unit Price</p>
+                      <p className="text-sm font-medium">{formatCost(breakdown.unitPrice)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Total</p>
+                      <p className="text-sm font-semibold text-primary">{formatCost(breakdown.totalPrice || 0)}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="flex items-center justify-between bg-linear-to-r from-primary/5 to-primary/10 p-4 rounded-lg border-2 border-primary/10">
