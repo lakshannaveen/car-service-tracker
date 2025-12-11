@@ -42,7 +42,7 @@ export default function LoginPage() {
       console.error('Login failed with error:', error)
       toast({
         title: "Login Failed",
-        description: error,
+        description: "Invalid email or password",
         variant: "destructive",
       })
       setIsLoading(false)
@@ -54,7 +54,7 @@ export default function LoginPage() {
       console.error('Login failed: invalid response data', data)
       toast({
         title: "Login Failed",
-        description: "Invalid credentials. Please check your email and password.",
+        description: "Invalid email or password",
         variant: "destructive",
       })
       setIsLoading(false)
