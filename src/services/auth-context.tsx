@@ -48,6 +48,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?")
+    if (!confirmLogout) return
+    
     localStorage.removeItem("authToken")
     localStorage.removeItem("userData")
     setUser(null)

@@ -157,7 +157,14 @@ export default function DashboardPage() {
             <h1 className="text-2xl font-bold">My Vehicles</h1>
             <p className="text-sm text-muted-foreground">Welcome back, {user.fullName}</p>
           </div>
-          <Button variant="ghost" size="icon" onClick={logout}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => {
+              const confirmLogout = window.confirm("Are you sure you want to log out?")
+              if (confirmLogout) logout()
+            }}
+          >
             <LogOut className="w-5 h-5" />
           </Button>
         </div>

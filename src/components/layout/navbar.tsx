@@ -18,6 +18,10 @@ export function Navbar() {
     return name.substring(0, 2).toUpperCase()
   }
 
+  const handleLogout = () => {
+    logout()
+  }
+
   return (
     <header className="hidden md:block bg-white border-b border-border sticky top-0 z-40">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -44,7 +48,7 @@ export function Navbar() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={logout}
+                onClick={handleLogout}
                 className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 rounded-lg transition-all"
               >
                 <LogOut className="w-4 h-4" />

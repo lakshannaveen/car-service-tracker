@@ -35,7 +35,12 @@ export async function fetchWithAuth<T>(endpoint: string, options: RequestInit = 
       
       // Handle specific status codes
       if (response.status === 401) {
-        return { error: errorData?.message || "Invalid credentials. Please check your email and password." }
+        // Check if it's an email not found error vs wrong password
+        const message = errorData?.message || errorData?.error || ""
+        if (message.toLowerCase().includes("email") || message.toLowerCase().includes("not found") || message.toLowerCase().includes("user")) {
+          return { error: "Email not found in system. Please check your email or create a new account." }
+        }
+        return { error: errorData?.message || "Invalid password. Please try again." }
       }
       if (response.status === 403) {
         return { error: errorData?.message || "Access forbidden. Please check your permissions." }

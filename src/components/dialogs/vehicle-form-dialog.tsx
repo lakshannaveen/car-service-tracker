@@ -101,13 +101,13 @@ export function VehicleFormDialog({ open, onOpenChange, vehicle, onSubmit }: Veh
               <Label htmlFor="licensePlate">License Plate</Label>
               <Input
                 id="licensePlate"
-                placeholder="CAB-1234 or WP ABC-1234"
+                placeholder="ABC-1234"
                 value={formData.licensePlate}
                 onChange={(e) => setFormData({ ...formData, licensePlate: e.target.value.toUpperCase() })}
                 required
                 disabled={isLoading}
-                pattern="^([A-Z]{2,3}-\d{4}|[A-Z]{2}\s[A-Z]{2,3}-\d{4})$"
-                title="Please enter a valid Sri Lankan license plate (e.g., CAB-1234 or WP ABC-1234)"
+                pattern="^[A-Z]{2,3}-\d{4}$"
+                title="Please enter a valid Sri Lankan license plate (e.g., ABC-1234 or AB-1234)"
               />
             </div>
           </div>
