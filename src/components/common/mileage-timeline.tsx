@@ -40,6 +40,21 @@ const COMPONENT_SERVICE_INTERVALS: Record<string, number> = {
   "tire rotation": 7500,
 }
 
+// Mapping for service type names to component names
+const SERVICE_TYPE_TO_COMPONENT: Record<string, string> = {
+  "oil change": "engine oil",
+  "oil filter": "oil filter",
+  "air filter replacement": "air filter",
+  "cabin air filter replacement": "cabin air filter",
+  "tire rotation": "tire rotation",
+  "brake service": "brake pads",
+  "brake fluid": "brake fluid",
+  "spark plugs": "spark plugs",
+  "timing belt": "timing belt",
+  "transmission service": "transmission fluid",
+  "transmission fluid": "transmission fluid",
+}
+
 export function MileageTimeline({ records }: MileageTimelineProps) {
   const [localRecords, setLocalRecords] = useState<ServiceRecord[]>([])
   const [componentStatus, setComponentStatus] = useState<ComponentServiceStatus[]>([])
@@ -125,28 +140,25 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
   // Helper function to extract serviced components from a record
   const extractServicedComponents = (record: ServiceRecord): string[] => {
     const components: string[] = []
+    const serviceTypeLower = (record.serviceType || '').toLowerCase()
+    const descriptionLower = (record.description || '').toLowerCase()
+    const searchText = `${serviceTypeLower} ${descriptionLower}`
     
-    // Method 1: Check serviceType field
-    if (record.serviceType) {
-      const serviceType = record.serviceType.toLowerCase()
-      Object.keys(COMPONENT_SERVICE_INTERVALS).forEach(component => {
-        if (serviceType.includes(component.toLowerCase())) {
-          components.push(component)
-        }
-      })
+    // First, check if serviceType matches any mapping
+    for (const [key, value] of Object.entries(SERVICE_TYPE_TO_COMPONENT)) {
+      if (serviceTypeLower.includes(key) && !components.includes(value)) {
+        components.push(value)
+      }
     }
     
-    // Method 2: Check description field
-    if (record.description) {
-      const description = record.description.toLowerCase()
-      Object.keys(COMPONENT_SERVICE_INTERVALS).forEach(component => {
-        if (description.includes(component.toLowerCase()) && !components.includes(component)) {
-          components.push(component)
-        }
-      })
-    }
+    // Then, check all components in defined intervals against combined text
+    Object.keys(COMPONENT_SERVICE_INTERVALS).forEach(component => {
+      if (searchText.includes(component.toLowerCase()) && !components.includes(component)) {
+        components.push(component)
+      }
+    })
 
-    return [...new Set(components)] // Remove duplicates
+    return components
   }
 
   if (!localRecords || localRecords.length === 0) {
@@ -275,7 +287,7 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
               <CheckCircle className="w-4 h-4" />
               Component Status
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {componentStatus.map((status) => {
                 const isUrgent = status.serviceUrgent
                 const percentage = Math.min(100, (status.mileageSinceService / status.recommendedInterval) * 100)
@@ -283,32 +295,37 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
                 return (
                   <div
                     key={status.component}
-                    className={`p-2 rounded-lg border text-xs ${
+                    className={`p-3 rounded-lg border ${
                       isUrgent
                         ? 'bg-red-50 border-red-200' 
                         : 'bg-green-50 border-green-200'
                     }`}
                   >
-                    <div className="flex items-start justify-between mb-1">
-                      <span className="font-medium capitalize text-xs leading-tight">{status.component}</span>
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="font-semibold capitalize text-sm">{status.component}</span>
                       {isUrgent ? (
-                        <AlertTriangle className="w-3 h-3 text-red-600 flex-shrink-0 mt-0.5" />
+                        <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
                       ) : (
-                        <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
                       )}
                     </div>
                     
+                    {/* Mileage display */}
+                    <div className="mb-2 text-sm font-bold text-gray-800">
+                      <span className="text-base">{status.mileageSinceService.toLocaleString()}</span>
+                      <span className="text-xs text-gray-600 ml-1">/ {status.recommendedInterval.toLocaleString()} mi</span>
+                    </div>
+                    
                     {/* Progress bar */}
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+                    <div className="w-full bg-gray-300 rounded-full h-2.5 overflow-hidden">
                       <div 
-                        className={`h-1.5 rounded-full ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
+                        className={`h-2.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
                     
-                    <div className="flex justify-between items-center text-[10px] opacity-75">
-                      <span>{status.mileageSinceService.toLocaleString()} mi</span>
-                      <span>/ {status.recommendedInterval.toLocaleString()}</span>
+                    <div className="mt-2 text-xs text-gray-600">
+                      {percentage.toFixed(0)}% of interval used
                     </div>
                   </div>
                 )
