@@ -62,11 +62,21 @@ interface CostBreakdownFormState {
 
 export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit, onCancel }: ServiceRecordFormProps) {
   const { toast } = useToast()
+  
+  // Extract date portion from ISO string or plain date
+  const getDateForInput = (dateString?: string): string => {
+    if (!dateString) return new Date().toISOString().split("T")[0]
+    // If it's an ISO datetime, take the date portion before the 'T'
+    return dateString.includes("T") ? dateString.split("T")[0] : dateString
+  }
+  
   const [formData, setFormData] = useState<ServiceRecord>(
-    record || {
+    record ? {
+      ...record,
+      serviceDate: getDateForInput(record.serviceDate)
+    } : {
       vehicleId,
       serviceDate: new Date().toISOString().split("T")[0],
-      // serviceDate: formatDate(new Date()),
       serviceType: "",
       providerName: "",
       cost: 0,
