@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "@/services/auth-context"
-import { vehiclesApi, serviceRecordsApi, attachmentsApi, type Vehicle, type ServiceRecord } from "@/services/api"
+import { vehiclesApi, serviceRecordsApi, attachmentsApi, type Vehicle, type ServiceRecord } from "@/services"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from "@/components/ui/card"

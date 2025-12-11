@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@/services/auth-context"
-import { vehiclesApi, type Vehicle } from "@/services/api"
+import { vehiclesApi, type Vehicle } from "@/services"
 import { VehicleCard } from "@/components/cards"
 import { VehicleFormDialog } from "@/components/dialogs"
 import { MobileNav } from "@/components/layout"

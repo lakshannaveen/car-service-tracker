@@ -1,7 +1,7 @@
 
 
-import type { Attachment } from "@/services/api"
-import { getAttachmentServeUrl } from "@/services/api"
+import type { Attachment } from "@/services"
+import { getAttachmentServeUrl } from "@/services"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { File, ImageIcon, X } from "lucide-react"

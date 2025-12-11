@@ -1,6 +1,6 @@
 import type React from "react"
 import { useState } from "react"
-import type { ServiceRecord, CostBreakdown } from "@/services/api"
+import type { ServiceRecord, CostBreakdown } from "@/services"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

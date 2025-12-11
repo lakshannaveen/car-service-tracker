@@ -1,7 +1,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import type { Vehicle } from "@/services/api"
+import type { Vehicle } from "@/services"
 import {
   Dialog,
   DialogContent,

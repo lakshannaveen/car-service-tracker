@@ -1,3 +1,4 @@
+/*
 // API utility functions for connecting to C# backend
 // const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:60748/api"
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://cartrackerbackend.dockyardsoftware.com/api"
@@ -478,3 +479,15 @@ export const attachmentsApi = {
 }
 
 export {};
+*/
+
+// Barrel re-export: prefer these separated service modules
+export * from "./config"
+export * from "./types"
+export * from "./http"
+export * from "./normalizers"
+export * from "./auth-service"
+export * from "./vehicles-service"
+export * from "./service-records-service"
+export * from "./cost-breakdowns-service"
+export * from "./attachments-service"

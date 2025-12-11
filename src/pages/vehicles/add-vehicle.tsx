@@ -2,7 +2,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useAuth } from "@/services/auth-context"
-import { vehiclesApi, type Vehicle } from "@/services/api"
+import { vehiclesApi, type Vehicle } from "@/services"
 import { MobileNav } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

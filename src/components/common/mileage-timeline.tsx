@@ -324,7 +324,7 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
 // garuka code 
 // 
 
-// import type { ServiceRecord } from "@/services/api"
+// import type { ServiceRecord } from "@/services"
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 // import { Badge } from "@/components/ui/badge"
 // import { Gauge, TrendingUp } from "lucide-react"
