@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Trash2, Plus, MoreVertical, Loader2, Check, Receipt, Edit, Info } from "lucide-react"
+import { Trash2, Plus, Loader2, Check, Receipt, Edit, Info, Banknote } from "lucide-react"
 
 interface ServiceRecordFormProps {
   vehicleId: string
@@ -355,13 +355,13 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                   className="gap-2 bg-primary hover:bg-primary/90"
                 >
                   <Plus className="w-4 h-4" />
-                  Add Item
+                  Add Cost Item
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Receipt className="w-5 h-5" />
+                    <Banknote className="w-5 h-5" />
                     {editingBreakdownIndex !== null ? "Edit Cost Item" : "Add Cost Item"}
                   </DialogTitle>
                   <DialogDescription>
@@ -399,7 +399,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                       required
                     >
                       <SelectTrigger id="itemCategory" className="transition-colors focus:ring-2 focus:ring-primary/20">
-                        <SelectValue />
+                        <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
                         {costCategories.map((cat) => (
@@ -441,17 +441,18 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                       <Label htmlFor="unitPrice">Unit Price</Label>
                       <Input
                         id="unitPrice"
-                        type="number"
+                        type="text"
+                        inputMode="decimal"
                         min="0"
-                        step="0.01"
                         placeholder="0.00"
-                        value={breakdownFormData.unitPrice}
-                        onChange={(e) =>
+                        value={breakdownFormData.unitPrice === 0 ? "" : breakdownFormData.unitPrice}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9.]/g, "");
                           setBreakdownFormData({
                             ...breakdownFormData,
-                            unitPrice: e.target.value === "" ? "" : Number(e.target.value),
+                            unitPrice: value === "" ? "" : Number(value),
                           })
-                        }
+                        }}
                         required
                         className="transition-colors focus:ring-2 focus:ring-primary/20"
                       />
@@ -531,30 +532,28 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                         {formatCost(breakdown.totalPrice || 0)}
                       </TableCell>
                       <TableCell className="py-3 text-center">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditBreakdown(index)} className="gap-2">
-                              <Edit className="w-4 h-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDeleteBreakdown(index)}
-                              className="gap-2 text-destructive"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleEditBreakdown(index)}
+                            title="Edit"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:text-destructive"
+                            onClick={() => handleDeleteBreakdown(index)}
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
