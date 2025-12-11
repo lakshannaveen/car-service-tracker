@@ -14,7 +14,7 @@ import { ServiceRecordCard } from "@/components/cards"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate, useParams } from "react-router-dom"
-import { ArrowLeft, Plus, FileText, DollarSign, Calendar, Receipt } from "lucide-react"
+import { ArrowLeft, Plus, FileText, Banknote, Calendar, Receipt } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { AttachmentViewer } from "@/components/viewers"
 import { ServiceRecordForm } from "@/components/forms"
@@ -415,11 +415,11 @@ export default function HistoryPage() {
           {/* Total Spent */}
           <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-green-600" />
+              <Banknote className="w-5 h-5 text-green-600" />
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">Total Spent</div>
-              <div className="text-3xl font-bold text-gray-900">Rs. {totalCost.toFixed(2)}</div>
+              <div className="text-3xl font-bold text-gray-900">LKR {totalCost.toFixed(2)}</div>
             </div>
             <div className="mt-4 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>

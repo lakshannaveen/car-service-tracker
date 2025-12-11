@@ -33,11 +33,13 @@ export default function LoginPage() {
 
     setIsLoading(true)
 
-    console.debug('LoginPage: submitting', { email })
+    console.log('LoginPage: submitting login request', { email })
     const { data, error } = await authApi.login({ email, password })
-    console.debug('LoginPage: authApi.login response', { data, error })
+    console.log('LoginPage: authApi.login response', { hasData: !!data, error, data })
 
+    // Handle API errors first
     if (error) {
+      console.error('Login failed with error:', error)
       toast({
         title: "Login Failed",
         description: error,
@@ -47,30 +49,25 @@ export default function LoginPage() {
       return
     }
 
+    // Validate we got valid data back
     if (!data || !data.token || !data.userId) {
+      console.error('Login failed: invalid response data', data)
       toast({
         title: "Login Failed",
-        description: "Invalid credentials. Please check your email and password and try again.",
+        description: "Invalid credentials. Please check your email and password.",
         variant: "destructive",
       })
       setIsLoading(false)
       return
     }
 
-    if (data) {
-      login(data.token, {
-        userId: data.userId,
-        email: data.email,
-        fullName: data.fullName,
-      })
-
-      setTimeout(() => {
-        console.debug('LoginPage: localStorage after login', {
-          authToken: localStorage.getItem('authToken'),
-          userData: localStorage.getItem('userData'),
-        })
-      }, 50)
-    }
+    // Success - log in the user
+    console.log('Login successful, storing token and navigating to dashboard')
+    login(data.token, {
+      userId: data.userId,
+      email: data.email,
+      fullName: data.fullName,
+    })
 
     setIsLoading(false)
   }

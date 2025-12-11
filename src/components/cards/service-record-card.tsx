@@ -3,7 +3,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-  DollarSign,
   Wrench,
   MoreVertical,
   Paperclip,
@@ -137,8 +136,8 @@ export function ServiceRecordCard({
         {/* Price + Mileage Row */}
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-            <DollarSign className="w-4 h-4" />
-            <span>Rs.{record.cost.toFixed(2)}</span>
+            <span className="font-semibold text-green-700">LKR</span>
+            <span>{record.cost.toFixed(2)}</span>
           </div>
 
           {record.mileage && (

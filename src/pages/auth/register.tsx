@@ -43,9 +43,13 @@ export default function RegisterPage() {
 
     setIsLoading(true)
 
+    console.log('RegisterPage: submitting registration request', { email, fullName })
     const { data, error } = await authApi.register({ email, password, fullName })
+    console.log('RegisterPage: authApi.register response', { hasData: !!data, error })
 
+    // Handle API errors (including duplicate email)
     if (error) {
+      console.error('Registration failed with error:', error)
       toast({
         title: "Registration Failed",
         description: error,
@@ -55,7 +59,9 @@ export default function RegisterPage() {
       return
     }
 
+    // Validate we got valid data back
     if (!data || !data.token || !data.userId) {
+      console.error('Registration failed: invalid response data', data)
       toast({
         title: "Registration Failed",
         description: "Failed to create account. Please try again.",
@@ -65,17 +71,18 @@ export default function RegisterPage() {
       return
     }
 
-    if (data) {
-      toast({
-        title: "Account Created",
-        description: "Welcome to Car Service Tracker!",
-      })
-      login(data.token, {
-        userId: data.userId,
-        email: data.email,
-        fullName: data.fullName,
-      })
-    }
+    // Success - show welcome message and log in
+    console.log('Registration successful, logging in user')
+    toast({
+      title: "Account Created",
+      description: "Welcome to Car Service Tracker!",
+    })
+    
+    login(data.token, {
+      userId: data.userId,
+      email: data.email,
+      fullName: data.fullName,
+    })
 
     setIsLoading(false)
   }
