@@ -42,7 +42,7 @@ export default function LoginPage() {
       console.error('Login failed with error:', error)
       toast({
         title: "Login Failed",
-        description: "Email not found",
+        description: error,
         variant: "destructive",
       })
       setIsLoading(false)
