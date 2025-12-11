@@ -186,16 +186,87 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
     )
 
   if (recordsWithMileage.length === 0) {
+    // If no mileage data, still show component status if available
+    if (componentStatus.length === 0) {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Gauge className="w-5 h-5" />
+              Mileage History
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center py-6 text-muted-foreground">
+            <p>No mileage data recorded yet</p>
+          </CardContent>
+        </Card>
+      )
+    }
+    
+    // Show only component status without mileage history
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Gauge className="w-5 h-5" />
-            Mileage History
+            Component Status
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-center py-6 text-muted-foreground">
-          <p>No mileage data recorded yet</p>
+
+        <CardContent className="space-y-4">
+          {/* Component Service Status - Compact grid layout */}
+          {componentStatus.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-xs mb-2 flex items-center gap-2">
+                <CheckCircle className="w-3 h-3" />
+                Service Status
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {componentStatus.map((status) => {
+                  const isUrgent = status.serviceUrgent
+                  const percentage = Math.min(100, (status.mileageSinceService / status.recommendedInterval) * 100)
+                  
+                  return (
+                    <div
+                      key={status.component}
+                      className={`p-2 rounded-lg border text-xs ${
+                        isUrgent
+                          ? 'bg-red-50 border-red-200' 
+                          : 'bg-green-50 border-green-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium capitalize text-xs truncate">{status.component}</span>
+                        {isUrgent ? (
+                          <AlertTriangle className="w-3 h-3 text-red-600 flex-shrink-0 ml-1" />
+                        ) : (
+                          <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0 ml-1" />
+                        )}
+                      </div>
+                      
+                      {/* Mileage display */}
+                      <div className="mb-1 text-xs font-semibold text-gray-800">
+                        <span className="text-sm">{status.mileageSinceService.toLocaleString()}</span>
+                        <span className="text-[10px] text-gray-600">/{status.recommendedInterval.toLocaleString()}</span>
+                      </div>
+                      
+                      {/* Progress bar */}
+                      <div className="w-full bg-gray-300 rounded-full h-1.5 overflow-hidden">
+                        <div 
+                          className={`h-1.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                      
+                      <div className="mt-1 text-[10px] text-gray-600">
+                        {percentage.toFixed(0)}%
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     )
@@ -218,7 +289,7 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
       }),
       servicedComponents: extractServicedComponents(record)
     }
-  })
+  }).filter(data => data.record.mileage != null && data.record.mileage > 0)
 
   const latestMileage = recordsWithMileage[recordsWithMileage.length - 1]?.mileage || 0
   const oldestMileage = recordsWithMileage[0]?.mileage || 0
@@ -283,11 +354,11 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
         {/* Component Service Status - Compact grid layout */}
         {componentStatus.length > 0 && (
           <div>
-            <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" />
+            <h4 className="font-semibold text-xs mb-2 flex items-center gap-2">
+              <CheckCircle className="w-3 h-3" />
               Component Status
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {componentStatus.map((status) => {
                 const isUrgent = status.serviceUrgent
                 const percentage = Math.min(100, (status.mileageSinceService / status.recommendedInterval) * 100)
@@ -295,37 +366,37 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
                 return (
                   <div
                     key={status.component}
-                    className={`p-3 rounded-lg border ${
+                    className={`p-2 rounded-lg border text-xs ${
                       isUrgent
                         ? 'bg-red-50 border-red-200' 
                         : 'bg-green-50 border-green-200'
                     }`}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="font-semibold capitalize text-sm">{status.component}</span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium capitalize text-xs truncate">{status.component}</span>
                       {isUrgent ? (
-                        <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <AlertTriangle className="w-3 h-3 text-red-600 flex-shrink-0 ml-1" />
                       ) : (
-                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                        <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0 ml-1" />
                       )}
                     </div>
                     
                     {/* Mileage display */}
-                    <div className="mb-2 text-sm font-bold text-gray-800">
-                      <span className="text-base">{status.mileageSinceService.toLocaleString()}</span>
-                      <span className="text-xs text-gray-600 ml-1">/ {status.recommendedInterval.toLocaleString()} mi</span>
+                    <div className="mb-1 text-xs font-semibold text-gray-800">
+                      <span className="text-sm">{status.mileageSinceService.toLocaleString()}</span>
+                      <span className="text-[10px] text-gray-600">/{status.recommendedInterval.toLocaleString()}</span>
                     </div>
                     
                     {/* Progress bar */}
-                    <div className="w-full bg-gray-300 rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-gray-300 rounded-full h-1.5 overflow-hidden">
                       <div 
-                        className={`h-2.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
                     
-                    <div className="mt-2 text-xs text-gray-600">
-                      {percentage.toFixed(0)}% of interval used
+                    <div className="mt-1 text-[10px] text-gray-600">
+                      {percentage.toFixed(0)}%
                     </div>
                   </div>
                 )
