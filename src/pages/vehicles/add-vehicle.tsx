@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, AlertCircle } from "lucide-react"
 
 export default function AddVehiclePage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -22,6 +22,7 @@ export default function AddVehiclePage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [existingVehicles, setExistingVehicles] = useState<Vehicle[]>([])
+  const [licensePlateError, setLicensePlateError] = useState("")
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -41,12 +42,54 @@ export default function AddVehiclePage() {
     fetchVehicles()
   }, [])
 
+  // Real-time validation for duplicate license plate
+  useEffect(() => {
+    if (!formData.licensePlate || formData.licensePlate.trim() === "") {
+      setLicensePlateError("")
+      return
+    }
+
+    const normalizedInput = formData.licensePlate.toUpperCase().trim()
+    const isDuplicate = existingVehicles.some(
+      (v) => v.licensePlate?.toUpperCase().trim() === normalizedInput
+    )
+
+    if (isDuplicate) {
+      setLicensePlateError("This vehicle number is already added.")
+    } else {
+      setLicensePlateError("")
+    }
+  }, [formData.licensePlate, existingVehicles])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Check if vehicle with same license plate already exists
-    const vehicleExists = existingVehicles.some(
-      (v) => v.licensePlate.toUpperCase() === formData.licensePlate.toUpperCase()
+    // Check for any validation errors
+    if (licensePlateError) {
+      toast({
+        title: "Error",
+        description: licensePlateError,
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!formData.licensePlate || formData.licensePlate.trim() === "") {
+      toast({
+        title: "Error",
+        description: "License plate is required",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Final backend check before submitting
+    const { data: freshVehicles } = await vehiclesApi.getAll()
+    const vehiclesToCheck = freshVehicles || existingVehicles
+    
+    const normalizedInput = formData.licensePlate.toUpperCase().trim()
+    const vehicleExists = vehiclesToCheck.some(
+      (v) => v.licensePlate?.toUpperCase().trim() === normalizedInput
     )
 
     if (vehicleExists) {
@@ -63,12 +106,26 @@ export default function AddVehiclePage() {
     const { error } = await vehiclesApi.create(formData)
 
     if (error) {
-      toast({
-        title: "Error",
-        description: error,
-        variant: "destructive",
-      })
+      // Check if backend also rejected due to duplicate
+      if (error.toLowerCase().includes("duplicate") || error.toLowerCase().includes("already exists")) {
+        toast({
+          title: "Error",
+          description: "This vehicle number is already added.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: error,
+          variant: "destructive",
+        })
+      }
       setIsLoading(false)
+      // Refresh the vehicles list in case another user added it
+      const { data: updatedVehicles } = await vehiclesApi.getAll()
+      if (updatedVehicles) {
+        setExistingVehicles(updatedVehicles)
+      }
       return
     }
 
@@ -149,7 +206,14 @@ export default function AddVehiclePage() {
                   disabled={isLoading}
                   pattern="^[A-Z]{2,3}-\d{4}$"
                   title="Please enter a valid Sri Lankan license plate (e.g., ABC-1234 or AB-1234)"
+                  className={licensePlateError ? "border-destructive" : ""}
                 />
+                {licensePlateError && (
+                  <div className="flex items-center gap-2 text-destructive text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{licensePlateError}</span>
+                  </div>
+                )}
               </div>
               <div className="flex gap-3 pt-4">
                 <Button
@@ -161,7 +225,11 @@ export default function AddVehiclePage() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isLoading} className="flex-1">
+                <Button 
+                  type="submit" 
+                  disabled={isLoading || !!licensePlateError} 
+                  className="flex-1"
+                >
                   {isLoading ? "Adding..." : "Add Vehicle"}
                 </Button>
               </div>

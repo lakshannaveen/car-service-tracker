@@ -403,12 +403,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
                       </SelectTrigger>
                       <SelectContent>
                         {costCategories.map((cat) => (
-                          <SelectItem key={cat} value={cat} className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${
-                              cat === "Labor" ? "bg-blue-500" :
-                              cat === "Parts" ? "bg-green-500" :
-                              cat === "Fluids" ? "bg-purple-500" : "bg-gray-500"
-                            }`}></div>
+                          <SelectItem key={cat} value={cat}>
                             {cat}
                           </SelectItem>
                         ))}
