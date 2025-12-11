@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Trash2, Plus, Loader2, Check, Receipt, Edit, Info, Banknote } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface ServiceRecordFormProps {
   vehicleId: string
@@ -59,6 +60,7 @@ interface CostBreakdownFormState {
 }
 
 export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit, onCancel }: ServiceRecordFormProps) {
+  const { toast } = useToast()
   const [formData, setFormData] = useState<ServiceRecord>(
     record || {
       vehicleId,
@@ -146,6 +148,10 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
       updated[editingBreakdownIndex] = newBreakdown
       setCostBreakdowns(updated)
       setEditingBreakdownIndex(null)
+      toast({
+        title: "Success",
+        description: "Cost item updated successfully",
+      })
     } else {
       setCostBreakdowns([...costBreakdowns, newBreakdown])
     }
@@ -293,19 +299,21 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
           id="cost"
           type="text"
           placeholder="0.00"
-          value={formatCost(formData.cost)}
+          value={costBreakdowns.length > 0 ? formatCost(totalBreakdownCost) : formatCost(formData.cost)}
           onChange={(e) => {
-            const numericValue = parseFormattedNumber(e.target.value)
-            setFormData({ ...formData, cost: numericValue })
+            if (costBreakdowns.length === 0) {
+              const numericValue = parseFormattedNumber(e.target.value)
+              setFormData({ ...formData, cost: numericValue })
+            }
           }}
           required
-          disabled={isLoading}
+          disabled={isLoading || costBreakdowns.length > 0}
           className="h-11 transition-colors focus:ring-2 focus:ring-primary/20"
+          readOnly={costBreakdowns.length > 0}
         />
         {costBreakdowns.length > 0 && (
-          <p className="text-xs text-muted-foreground flex items-center gap-1">
-            <Info className="w-3 h-3" />
-            Tip: You can manually enter a total or use the breakdown calculation below
+          <p className="text-xs text-muted-foreground">
+            Auto-calculated from cost breakdown items
           </p>
         )}
       </div>
@@ -557,7 +565,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
             </div>
 
             <div className="flex items-center justify-between bg-linear-to-r from-primary/5 to-primary/10 p-4 rounded-lg border-2 border-primary/10">
-              <span className="font-semibold text-lg">Subtotal from Breakdown:</span>
+              <span className="font-semibold text-lg">Total:</span>
               <span className="text-xl font-bold text-primary">{formatCost(totalBreakdownCost)}</span>
             </div>
           </CardContent>
