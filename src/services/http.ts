@@ -49,7 +49,12 @@ export async function fetchWithAuth<T>(endpoint: string, options: RequestInit = 
         return { error: errorData?.message || errorData?.error || "Invalid request. Please check your input." }
       }
       if (response.status === 409) {
-        return { error: errorData?.message || "This email is already registered. Please use a different email or try logging in." }
+        // Check if it's a duplicate license plate or email
+        const message = errorData?.message || errorData?.error || ""
+        if (message.toLowerCase().includes("license") || message.toLowerCase().includes("plate") || message.toLowerCase().includes("vehicle number")) {
+          return { error: "This vehicle number is already added." }
+        }
+        return { error: "This email is already registered. Please use a different email or try logging in." }
       }
       if (response.status === 404) {
         return { error: errorData?.message || "User not found. Please check your email or register a new account." }
