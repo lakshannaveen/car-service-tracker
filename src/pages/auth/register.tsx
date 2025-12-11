@@ -21,6 +21,26 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate inputs
+    if (!email || !password || !fullName) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Validation Error",
+        description: "Password must be at least 6 characters long",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsLoading(true)
 
     const { data, error } = await authApi.register({ email, password, fullName })
@@ -29,6 +49,16 @@ export default function RegisterPage() {
       toast({
         title: "Registration Failed",
         description: error,
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+
+    if (!data || !data.token || !data.userId) {
+      toast({
+        title: "Registration Failed",
+        description: "Failed to create account. Please try again.",
         variant: "destructive",
       })
       setIsLoading(false)

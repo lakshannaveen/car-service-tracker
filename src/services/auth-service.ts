@@ -22,6 +22,11 @@ export const authApi = {
         }
       : null
 
+    // Validate that required fields are present
+    if (!normalized || !normalized.token || !normalized.userId) {
+      return { error: "Invalid credentials. Please check your email and password." }
+    }
+
     return { data: normalized as any }
   },
 
@@ -45,6 +50,11 @@ export const authApi = {
         }
       : null
 
+    // Validate that required fields are present
+    if (!normalized || !normalized.token || !normalized.userId) {
+      return { error: "Registration failed. Please try again." }
+    }
+
     return { data: normalized as any }
-  },
+  }
 }

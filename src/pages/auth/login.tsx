@@ -20,6 +20,17 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate inputs
+    if (!email || !password) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsLoading(true)
 
     console.debug('LoginPage: submitting', { email })
@@ -30,6 +41,16 @@ export default function LoginPage() {
       toast({
         title: "Login Failed",
         description: error,
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+
+    if (!data || !data.token || !data.userId) {
+      toast({
+        title: "Login Failed",
+        description: "Invalid credentials. Please check your email and password and try again.",
         variant: "destructive",
       })
       setIsLoading(false)
