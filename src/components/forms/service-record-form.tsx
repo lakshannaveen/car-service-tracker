@@ -223,13 +223,10 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
           <Label htmlFor="serviceDate" className="text-sm font-medium">Service Date *</Label>
           <Input
             id="serviceDate"
-            type="text"
-            placeholder="yyyy/mm/dd"
-            value={formatDateForDisplay(formData.serviceDate)}
+            type="date"
+            value={formData.serviceDate}
             onChange={(e) => {
-              const displayDate = e.target.value
-              const storageDate = formatDateForStorage(displayDate)
-              setFormData({ ...formData, serviceDate: storageDate })
+              setFormData({ ...formData, serviceDate: e.target.value })
             }}
             required
             disabled={isLoading}
@@ -265,7 +262,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
             <SelectTrigger id="serviceType" className="h-11 transition-colors focus:ring-2 focus:ring-primary/20">
               <SelectValue placeholder="Select service type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent side="bottom" align="start" className="max-h-[300px]">
               {serviceTypes.map((type) => (
                 <SelectItem key={type} value={type}>
                   {type}
@@ -302,13 +299,13 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
             setFormData({ ...formData, cost: numericValue })
           }}
           required
-          disabled={isLoading || costBreakdowns.length > 0}
+          disabled={isLoading}
           className="h-11 transition-colors focus:ring-2 focus:ring-primary/20"
         />
         {costBreakdowns.length > 0 && (
           <p className="text-xs text-muted-foreground flex items-center gap-1">
             <Info className="w-3 h-3" />
-            This will be automatically calculated from cost breakdowns
+            Tip: You can manually enter a total or use the breakdown calculation below
           </p>
         )}
       </div>

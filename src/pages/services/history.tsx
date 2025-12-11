@@ -373,7 +373,15 @@ export default function HistoryPage() {
       <header className="md:hidden bg-card border-b border-border sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
           <div className="flex items-center justify-between border-b border-border pb-2 mb-2">
-            <div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/dashboard")}
+              className="mr-2"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div className="flex-1">
               <h1 className="text-2xl font-bold">
                 {vehicle.make} {vehicle.model}
               </h1>
@@ -392,6 +400,31 @@ export default function HistoryPage() {
       </header>
 
       <main className="container mx-auto px-4 py-6">
+        <div className="hidden md:flex items-center gap-4 mb-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/dashboard")}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">
+              {vehicle.make} {vehicle.model}
+            </h1>
+            <p className="text-sm text-muted-foreground">{vehicle.licensePlate}</p>
+          </div>
+          <div className="ml-auto">
+            <Button
+              onClick={() => navigate(`/add-service/${vehicleId}`)}
+              className="gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Add Service
+            </Button>
+          </div>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-3 mb-8">
           {/* Total Services */}
           <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">

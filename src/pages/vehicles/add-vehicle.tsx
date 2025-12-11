@@ -21,6 +21,7 @@ export default function AddVehiclePage() {
     licensePlate: "",
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [existingVehicles, setExistingVehicles] = useState<Vehicle[]>([])
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -30,8 +31,33 @@ export default function AddVehiclePage() {
     }
   }, [user, authLoading, navigate])
 
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      const { data } = await vehiclesApi.getAll()
+      if (data) {
+        setExistingVehicles(data)
+      }
+    }
+    fetchVehicles()
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Check if vehicle with same license plate already exists
+    const vehicleExists = existingVehicles.some(
+      (v) => v.licensePlate.toUpperCase() === formData.licensePlate.toUpperCase()
+    )
+
+    if (vehicleExists) {
+      toast({
+        title: "Error",
+        description: "This vehicle number is already added.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsLoading(true)
 
     const { error } = await vehiclesApi.create(formData)
