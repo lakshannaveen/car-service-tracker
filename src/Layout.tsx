@@ -1,10 +1,11 @@
 import React from "react"
 import { useLocation } from "react-router-dom"
 
-import { AuthProvider } from "@/lib/auth-context"
+import { AuthProvider } from "@/services/auth-context"
 import { Toaster } from "@/components/ui/toaster"
+import { videos } from "@/assets"
 // import "./globals.css" // Already imported in main.tsx
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/components/layout"
 
 // Fonts are handled in index.html via Google Fonts CDN
 // We can use standard class names or font-family styles if needed, but Tailwind config should handle it if set up.
@@ -40,7 +41,7 @@ export default function Layout({
               opacity: 0.6, // Reduced opacity further
             }}
           >
-            <source src="/vehi.mp4" type="video/mp4" />
+            <source src={videos.vehi} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           {/* Darker overlay for better text contrast */}
