@@ -75,6 +75,7 @@ export default function HistoryPage() {
   }, [user, vehicleId])
 
   const loadVehicles = async () => {
+    window.scrollTo(0, 0)
     setIsLoading(true)
     const { data, error } = await vehiclesApi.getAll()
 
@@ -92,6 +93,7 @@ export default function HistoryPage() {
   }
 
   const loadData = async () => {
+    window.scrollTo(0, 0)
     setIsLoading(true)
 
     // Load vehicle
