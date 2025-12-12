@@ -193,6 +193,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
   }
 
   const totalBreakdownCost = costBreakdowns.reduce((sum, b) => sum + (b.totalPrice || 0), 0)
+  const displayedCost = costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -310,23 +311,15 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
           id="cost"
           type="text"
           placeholder="0.00"
-          value={costBreakdowns.length > 0 ? formatCost(totalBreakdownCost) : formatCost(formData.cost)}
-          onChange={(e) => {
-            if (costBreakdowns.length === 0) {
-              const numericValue = parseFormattedNumber(e.target.value)
-              setFormData({ ...formData, cost: numericValue })
-            }
-          }}
+          value={formatCost(displayedCost)}
           required
-          disabled={isLoading || costBreakdowns.length > 0}
+          disabled={isLoading}
           className="h-11 transition-colors focus:ring-2 focus:ring-primary/20"
-          readOnly={costBreakdowns.length > 0}
+          readOnly
         />
-        {costBreakdowns.length > 0 && (
-          <p className="text-xs text-muted-foreground">
-            Auto-calculated from cost breakdown items
-          </p>
-        )}
+        <p className="text-xs text-muted-foreground">
+          Total cost is auto-calculated from cost items and not editable
+        </p>
       </div>
 
       {/* Description */}
