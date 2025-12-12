@@ -1,4 +1,5 @@
 // App-wide constants
+export * from "./service-types"
 
 // API endpoints
 export const API_ENDPOINTS = {
