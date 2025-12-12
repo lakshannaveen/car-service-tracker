@@ -429,13 +429,13 @@ export default function HistoryPage() {
 
         <div className="grid gap-4 md:grid-cols-3 mb-8">
           {/* Total Services */}
-          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+          <div className="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
               <FileText className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">Total Services</div>
-              <div className="text-3xl font-bold text-gray-900">{records.length}</div>
+              <div className="text-3xl font-bold">{records.length}</div>
             </div>
             <div className="mt-4">
               <div className="w-full bg-blue-100 rounded-full h-1">
@@ -448,13 +448,13 @@ export default function HistoryPage() {
           </div>
 
           {/* Total Spent */}
-          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+          <div className="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-green-100 flex items-center justify-center">
               <Banknote className="w-5 h-5 text-green-600" />
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">Total Spent</div>
-              <div className="text-3xl font-bold text-gray-900">LKR {totalCost.toFixed(2)}</div>
+              <div className="text-3xl font-bold">LKR {totalCost.toFixed(2)}</div>
             </div>
             <div className="mt-4 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
@@ -463,13 +463,13 @@ export default function HistoryPage() {
           </div>
 
           {/* Last Service */}
-          <div className="bg-white rounded-xl border border-muted shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
+          <div className="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-5 flex flex-col justify-between min-h-[140px] relative overflow-hidden">
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center">
               <Calendar className="w-5 h-5 text-orange-600" />
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">Last Service</div>
-              <div className="text-3xl font-bold text-gray-900">
+              <div className="text-3xl font-bold">
                 {records.length > 0
                   ? new Date(records[0].serviceDate).toLocaleDateString("en-US", {
                       month: "short",
