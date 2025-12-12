@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { videos } from "@/assets"
 // import "./globals.css" // Already imported in main.tsx
 import { Navbar } from "@/components/layout"
+import { ThemeProvider } from "@/components/layout/theme-provider"
 
 // Fonts are handled in index.html via Google Fonts CDN
 // We can use standard class names or font-family styles if needed, but Tailwind config should handle it if set up.
@@ -49,13 +50,15 @@ export default function Layout({
         </div>
 
         <AuthProvider>
-          <div className="relative z-10 min-h-screen flex flex-col">
-            {!hideNavbar && <Navbar />}
-            <main className="flex-1">
-              {children}
-            </main>
-          </div>
-          <Toaster />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="relative z-10 min-h-screen flex flex-col">
+              {!hideNavbar && <Navbar />}
+              <main className="flex-1">
+                {children}
+              </main>
+            </div>
+            <Toaster />
+          </ThemeProvider>
         </AuthProvider>
       </div>
     </>

@@ -1,13 +1,15 @@
 import { Link, useLocation } from "react-router-dom"
 import { useAuth } from "@/services/auth-context"
 import { Button } from "@/components/ui/button"
-import { Car, History, LogOut } from "lucide-react"
+import { Car, History, LogOut, Moon, Sun } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useTheme } from "next-themes"
 
 export function Navbar() {
   const location = useLocation()
   const pathname = location.pathname
   const { user, logout } = useAuth()
+  const { theme, setTheme, resolvedTheme } = useTheme()
 
   // Get user initials for avatar
   const getUserInitials = (name: string) => {
@@ -22,8 +24,13 @@ export function Navbar() {
     logout()
   }
 
+  const toggleTheme = () => {
+    const next = resolvedTheme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+  }
+
   return (
-    <header className="hidden md:block bg-white border-b border-border sticky top-0 z-40">
+    <header className="hidden md:block bg-white dark:bg-neutral-900 border-b border-border sticky top-0 z-40">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         
         {/* LEFT SECTION WITH CAR ICON IN CIRCLE + TITLE */}
@@ -38,6 +45,20 @@ export function Navbar() {
 
         {/* RIGHT SECTION */}
         <div className="flex items-center gap-4">
+          {/* Theme toggle */}
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+            className="rounded-full border-muted-foreground/30 dark:border-muted-foreground/40 hover:bg-muted/50"
+          >
+            {resolvedTheme === 'dark' ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </Button>
           {user ? (
             <>
               <Avatar className="w-10 h-10 border-2 border-primary/20">

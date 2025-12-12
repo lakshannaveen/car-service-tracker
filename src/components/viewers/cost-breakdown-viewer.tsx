@@ -43,12 +43,14 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={onClose}>
       <div
-        className="relative w-[90%] max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl shadow-lg bg-white"
+        // Use a theme-aware background here so the rounded corners don't show white artifacts in dark mode (fixes Edge/Chromium rendering)
+        className="relative w-[90%] max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl shadow-lg bg-white dark:bg-neutral-900"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-purple-600 hover:text-purple-800"
+          aria-label="Close cost breakdown"
         >
           <X className="w-6 h-6" />
         </button>
@@ -80,12 +82,15 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
                         <TableRow key={b.breakdownId || idx}>
                           <TableCell className="py-2 font-medium">{b.itemDescription}</TableCell>
                           <TableCell className="py-2">
-                            <Badge variant="outline" className={categoryColors[b.itemCategory] || ""}>
-                              {b.itemCategory}
+                            <Badge variant="outline" className={categoryColors[b.itemCategory || "Other"] || ""}>
+                              {b.itemCategory || "Other"}
                             </Badge>
                           </TableCell>
                           <TableCell className="py-2 text-right">{b.quantity}</TableCell>
-                          <TableCell className="py-2 text-right">{b.unitPrice.toFixed(2)}</TableCell>
+                          <TableCell className="py-2 text-right">
+                            {/* Guard in case unitPrice is undefined */}
+                            {typeof b.unitPrice === "number" ? b.unitPrice.toFixed(2) : "-"}
+                          </TableCell>
                           <TableCell className="py-2 text-right font-semibold">
                             LKR {(b.totalPrice || 0).toFixed(2)}
                           </TableCell>
