@@ -316,23 +316,23 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
         {/* Mileage Summary - Moved to top and made compact */}
         {recordsWithMileage.length > 1 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Flag className="w-5 h-5 text-blue-600" />
+            <div className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                <Flag className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xs text-gray-600 font-medium">First</p>
-                <p className="text-lg font-bold text-blue-700">{oldestMileage.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground font-medium">First</p>
+                <p className="text-lg font-bold text-card-foreground">{oldestMileage.toLocaleString()}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-100">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Target className="w-5 h-5 text-green-600" />
+            <div className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                <Target className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
-                <p className="text-xs text-gray-600 font-medium">Latest</p>
-                <p className="text-lg font-bold text-green-700">{latestMileage.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground font-medium">Latest</p>
+                <p className="text-lg font-bold text-card-foreground">{latestMileage.toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -340,12 +340,12 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
 
         {/* Service Alerts - Compact banner style */}
         {componentsNeedingService.length > 0 && (
-          <div className="p-3 border-l-4 border-red-500 bg-red-50 rounded">
-            <p className="font-semibold text-sm text-red-800 flex items-center gap-2 mb-1">
+          <div className="p-3 border-l-4 border-destructive bg-card rounded">
+            <p className="font-semibold text-sm text-destructive flex items-center gap-2 mb-1">
               <AlertTriangle className="w-4 h-4" />
               {componentsNeedingService.length} Component{componentsNeedingService.length > 1 ? 's' : ''} Need Service
             </p>
-            <p className="text-xs text-red-700">
+            <p className="text-xs text-muted-foreground">
               {componentsNeedingService.map(s => s.component).join(', ')}
             </p>
           </div>
@@ -366,36 +366,32 @@ export function MileageTimeline({ records }: MileageTimelineProps) {
                 return (
                   <div
                     key={status.component}
-                    className={`p-2 rounded-lg border text-xs ${
-                      isUrgent
-                        ? 'bg-red-50 border-red-200' 
-                        : 'bg-green-50 border-green-200'
-                    }`}
+                    className="p-2 rounded-lg border text-xs bg-card text-card-foreground border-border"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium capitalize text-xs truncate">{status.component}</span>
                       {isUrgent ? (
-                        <AlertTriangle className="w-3 h-3 text-red-600 flex-shrink-0 ml-1" />
+                        <AlertTriangle className="w-3 h-3 text-destructive flex-shrink-0 ml-1" />
                       ) : (
-                        <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0 ml-1" />
+                        <CheckCircle className="w-3 h-3 text-primary flex-shrink-0 ml-1" />
                       )}
                     </div>
                     
                     {/* Mileage display */}
-                    <div className="mb-1 text-xs font-semibold text-gray-800">
+                    <div className="mb-1 text-xs font-semibold text-card-foreground">
                       <span className="text-sm">{status.mileageSinceService.toLocaleString()}</span>
-                      <span className="text-[10px] text-gray-600">/{status.recommendedInterval.toLocaleString()}</span>
+                      <span className="text-[10px] text-muted-foreground">/{status.recommendedInterval.toLocaleString()}</span>
                     </div>
                     
                     {/* Progress bar */}
-                    <div className="w-full bg-gray-300 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
                       <div 
-                        className={`h-1.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-red-500' : 'bg-green-500'}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${isUrgent ? 'bg-destructive' : 'bg-primary'}`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
                     
-                    <div className="mt-1 text-[10px] text-gray-600">
+                    <div className="mt-1 text-[10px] text-muted-foreground">
                       {percentage.toFixed(0)}%
                     </div>
                   </div>
