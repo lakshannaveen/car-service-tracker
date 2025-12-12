@@ -96,6 +96,17 @@ export default function AddServicePage() {
 
       return (
           <div className="min-h-screen bg-background pb-20 md:pb-8">
+              {/* Top header with back to dashboard */}
+              <header className="bg-card border-b border-border sticky top-0 z-40">
+                <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="gap-2">
+                      <ArrowLeft className="w-4 h-4" />
+                    </Button>
+                    <h1 className="text-xl font-semibold">Add Service</h1>
+                  </div>
+                </div>
+              </header>
               <main className="container mx-auto px-3 py-6 max-w-xl">
                 <Card className="border-muted shadow-sm">
                   <CardHeader>
@@ -131,18 +142,18 @@ export default function AddServicePage() {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8">
-  <header className="md:hidden bg-card border-b border-border sticky top-0 z-40">
+      <header className="bg-card border-b border-border sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Add Service</h1>
-            <p className="text-sm text-muted-foreground">Select a vehicle to add a service record</p>
-          </div>
-          <Link to="/add-vehicle">
-            <Button size="sm" className="gap-2">
-              <Plus className="w-4 h-4" />
-              Add Vehicle
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back
             </Button>
-          </Link>
+            <div>
+              <h1 className="text-2xl font-bold">Add Service</h1>
+              <p className="text-sm text-muted-foreground">Select a vehicle to add a service record</p>
+            </div>
+          </div>
         </div>
       </header>
 
