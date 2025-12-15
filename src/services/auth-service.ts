@@ -8,7 +8,7 @@ export const authApi = {
       return { error: "Email and password are required" }
     }
 
-    const resp = await fetchWithAuth<any>("/auth/login", {
+    const resp = await fetchWithAuth<AuthResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify(credentials),
     })
@@ -21,38 +21,81 @@ export const authApi = {
 
     // Check if we have valid data
     if (!resp.data) {
-      return { error: "Login failed. Please try again." }
+      return { error: "Invalid credentials. Please check your email and password." }
     }
 
     const payload: any = resp.data
     
-    console.log("Login response:", JSON.stringify(payload, null, 2))
+    // Log the raw response to debug structure
+    console.log("Login raw response:", JSON.stringify(payload, null, 2))
     
-    // Backend returns data nested in Data property: { Data: { userId, email, fullName, token } }
-    const dataObject = payload?.Data || payload?.data || payload
+    // Try multiple unwrapping strategies
+    const unwrapped = payload?.Data ?? payload?.data ?? payload
     
-    // Extract fields from the data object
-    const userId = dataObject?.userId || dataObject?.UserId || dataObject?.id || dataObject?.Id
-    const token = dataObject?.token || dataObject?.Token
-    const email = dataObject?.email || dataObject?.Email || credentials.email
-    const fullName = dataObject?.fullName || dataObject?.FullName || ""
-
-    // Validate required fields
-    if (!token || !userId) {
-      console.error("Login response missing required fields:", {
-        token: token ? "present" : "MISSING",
-        userId: userId ? userId : "MISSING",
-        dataObject,
-        payload
-      })
-      return { error: "Login failed. Incomplete response from server. Please try again." }
-    }
+    // Extract token with multiple fallback strategies
+    const token = unwrapped?.token ?? 
+                  unwrapped?.Token ?? 
+                  unwrapped?.data?.token ?? 
+                  unwrapped?.Data?.token ??
+                  payload?.token ??
+                  payload?.Token
+    
+    // Extract userId with multiple fallback strategies (handle both string and number)
+    const userIdRaw = unwrapped?.userId ?? 
+                      unwrapped?.UserId ?? 
+                      unwrapped?.id ??
+                      unwrapped?.Id ??
+                      unwrapped?.data?.userId ?? 
+                      unwrapped?.Data?.userId ??
+                      payload?.userId ??
+                      payload?.UserId ??
+                      payload?.id ??
+                      payload?.Id
+    
+    const userId = userIdRaw ? String(userIdRaw) : ""
+    
+    // Extract email
+    const email = unwrapped?.email ?? 
+                  unwrapped?.Email ?? 
+                  unwrapped?.data?.email ?? 
+                  unwrapped?.Data?.email ??
+                  payload?.email ??
+                  payload?.Email ??
+                  credentials.email  // fallback to input
+    
+    // Extract fullName
+    const fullName = unwrapped?.fullName ?? 
+                     unwrapped?.FullName ?? 
+                     unwrapped?.data?.fullName ?? 
+                     unwrapped?.Data?.fullName ??
+                     payload?.fullName ??
+                     payload?.FullName ??
+                     ""
 
     const normalized: AuthResponse = {
-      token,
-      userId: String(userId),
+      token: token || "",
+      userId: userId,
       email: email || "",
       fullName: fullName || "",
+    }
+
+    // Log what we extracted
+    console.log("Login normalized:", { 
+      hasToken: !!normalized.token, 
+      hasUserId: !!normalized.userId,
+      userId: normalized.userId,
+      email: normalized.email 
+    })
+
+    // Validate that required fields are present
+    if (!normalized.token || !normalized.userId) {
+      console.error("Login response missing required fields:", {
+        token: normalized.token ? "present" : "MISSING",
+        userId: normalized.userId ? normalized.userId : "MISSING",
+        rawPayload: payload,
+        unwrapped: unwrapped
+      })
+      return { error: "Login failed. Invalid response from server. Please try again." }
     }
 
     console.log("Login successful:", { userId: normalized.userId, email: normalized.email })
@@ -69,7 +112,7 @@ export const authApi = {
       return { error: "Password must be at least 6 characters long" }
     }
 
-    const resp = await fetchWithAuth<any>("/auth/register", {
+    const resp = await fetchWithAuth<AuthResponse>("/auth/register", {
       method: "POST",
       body: JSON.stringify(userData),
     })
@@ -87,33 +130,76 @@ export const authApi = {
 
     const payload: any = resp.data
     
-    console.log("Registration response:", JSON.stringify(payload, null, 2))
+    // Log the raw response to debug structure
+    console.log("Registration raw response:", JSON.stringify(payload, null, 2))
     
-    // Backend returns data nested in Data property: { Data: { userId, email, fullName, token } }
-    const dataObject = payload?.Data || payload?.data || payload
+    // Try multiple unwrapping strategies
+    const unwrapped = payload?.Data ?? payload?.data ?? payload
     
-    // Extract fields from the data object
-    const userId = dataObject?.userId || dataObject?.UserId || dataObject?.id || dataObject?.Id
-    const token = dataObject?.token || dataObject?.Token
-    const email = dataObject?.email || dataObject?.Email || userData.email
-    const fullName = dataObject?.fullName || dataObject?.FullName || userData.fullName
-
-    // Validate required fields
-    if (!token || !userId) {
-      console.error("Registration response missing required fields:", {
-        token: token ? "present" : "MISSING",
-        userId: userId ? userId : "MISSING",
-        dataObject,
-        payload
-      })
-      return { error: "Registration failed. Incomplete response from server. Please try again." }
-    }
+    // Extract token with multiple fallback strategies
+    const token = unwrapped?.token ?? 
+                  unwrapped?.Token ?? 
+                  unwrapped?.data?.token ?? 
+                  unwrapped?.Data?.token ??
+                  payload?.token ??
+                  payload?.Token
+    
+    // Extract userId with multiple fallback strategies (handle both string and number)
+    const userIdRaw = unwrapped?.userId ?? 
+                      unwrapped?.UserId ?? 
+                      unwrapped?.id ??
+                      unwrapped?.Id ??
+                      unwrapped?.data?.userId ?? 
+                      unwrapped?.Data?.userId ??
+                      payload?.userId ??
+                      payload?.UserId ??
+                      payload?.id ??
+                      payload?.Id
+    
+    const userId = userIdRaw ? String(userIdRaw) : ""
+    
+    // Extract email
+    const email = unwrapped?.email ?? 
+                  unwrapped?.Email ?? 
+                  unwrapped?.data?.email ?? 
+                  unwrapped?.Data?.email ??
+                  payload?.email ??
+                  payload?.Email ??
+                  userData.email  // fallback to input
+    
+    // Extract fullName
+    const fullName = unwrapped?.fullName ?? 
+                     unwrapped?.FullName ?? 
+                     unwrapped?.data?.fullName ?? 
+                     unwrapped?.Data?.fullName ??
+                     payload?.fullName ??
+                     payload?.FullName ??
+                     userData.fullName  // fallback to input
 
     const normalized: AuthResponse = {
-      token,
-      userId: String(userId),
+      token: token || "",
+      userId: userId,
       email: email || "",
       fullName: fullName || "",
+    }
+
+    // Log what we extracted
+    console.log("Registration normalized:", { 
+      hasToken: !!normalized.token, 
+      hasUserId: !!normalized.userId,
+      userId: normalized.userId,
+      email: normalized.email 
+    })
+
+    // Validate that required fields are present
+    if (!normalized.token || !normalized.userId) {
+      console.error("Registration response missing required fields:", {
+        token: normalized.token ? "present" : "MISSING",
+        userId: normalized.userId ? normalized.userId : "MISSING",
+        rawPayload: payload,
+        unwrapped: unwrapped
+      })
+      return { error: "Registration failed. Invalid response from server. Please try again." }
     }
 
     console.log("Registration successful:", { userId: normalized.userId, email: normalized.email })
