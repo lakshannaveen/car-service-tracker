@@ -29,43 +29,41 @@ export async function fetchWithAuth<T>(endpoint: string, options: RequestInit = 
       headers,
     })
 
-    if (!response.ok) {
-      // Parse error response for detailed message
-      const errorData = await response.json().catch(() => null)
-      
-      // Handle specific status codes
-      if (response.status === 401) {
-        // Check if it's an email not found error vs wrong password
-        const message = errorData?.message || errorData?.error || ""
-        if (message.toLowerCase().includes("email") || message.toLowerCase().includes("not found") || message.toLowerCase().includes("user")) {
-          return { error: "Email not found in system. Please check your email or create a new account." }
-        }
-        return { error: errorData?.message || "Invalid password. Please try again." }
-      }
-      if (response.status === 403) {
-        return { error: errorData?.message || "Access forbidden. Please check your permissions." }
-      }
-      if (response.status === 400) {
-        return { error: errorData?.message || errorData?.error || "Invalid request. Please check your input." }
-      }
-      if (response.status === 409) {
-        // Check if it's a duplicate license plate or email
-        const message = errorData?.message || errorData?.error || ""
-        if (message.toLowerCase().includes("license") || message.toLowerCase().includes("plate") || message.toLowerCase().includes("vehicle number")) {
-          return { error: "This vehicle number is already added." }
-        }
-        return { error: "This email is already registered. Please use a different email or try logging in." }
-      }
-      if (response.status === 404) {
-        return { error: errorData?.message || "User not found. Please check your email or register a new account." }
-      }
-      
-      // Generic error with status code
-      return { error: errorData?.message || errorData?.error || `Request failed with status ${response.status}` }
+    // Parse the response
+    let responseData = null
+    try {
+      responseData = await response.json()
+    } catch {
+      responseData = null
     }
 
-    const data = await response.json()
-    return { data }
+    // Check if response was successful
+    if (!response.ok) {
+      // Handle error responses - check for both uppercase and lowercase
+      const errorMessage = 
+        responseData?.message || 
+        responseData?.Message || 
+        responseData?.error || 
+        responseData?.Error || 
+        ""
+      
+      console.error(`API Error ${response.status}:`, { responseData, errorMessage })
+      
+      // Return the error message from backend
+      return { error: errorMessage || `Request failed with status ${response.status}` }
+    }
+
+    // Success response - check if the backend returned success: false or Success: false
+    // This handles the case where HTTP is 200 but the response indicates failure
+    if (responseData?.success === false || responseData?.Success === false) {
+      // Response indicates failure
+      const errorMessage = responseData?.message || responseData?.Message || "Operation failed"
+      console.error("API returned success=false:", { errorMessage, responseData })
+      return { error: errorMessage }
+    }
+
+    // Return the data from the response - handle both Data and data
+    return { data: responseData?.data ?? responseData?.Data ?? responseData }
   } catch (error) {
     return { error: error instanceof Error ? error.message : "Network error. Please check your connection." }
   }
