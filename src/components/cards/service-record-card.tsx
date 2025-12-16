@@ -123,7 +123,7 @@ const FooterActions = ({
       )}
       <Button
         variant="outline"
-        className="flex-1 rounded-xl border-slate-300 text-slate-700 hover:bg-violet-600 hover:text-white transition-all duration-300"
+        className="flex-1 rounded-xl border-slate-300 text-slate-700 hover:bg-violet-600 hover:text-white transition-all duration-300 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-violet-500"
         onClick={() => onViewAttachments?.(record.recordId!)}
         disabled={!attachmentCount && !onViewAttachments}
       >
