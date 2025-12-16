@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Plus, FileText, Banknote, Calendar } from "lucide-react"
+import { formatCost } from "@/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { AttachmentViewer } from "@/components/viewers"
 import { ServiceRecordForm } from "@/components/forms"
@@ -454,7 +455,7 @@ export default function HistoryPage() {
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">Total Spent</div>
-              <div className="text-3xl font-bold">LKR {totalCost.toFixed(2)}</div>
+              <div className="text-3xl font-bold">LKR {formatCost(totalCost)}</div>
             </div>
             <div className="mt-4 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>

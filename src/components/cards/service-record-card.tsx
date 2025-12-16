@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Wrench, MoreVertical, Paperclip, Gauge, Banknote } from "lucide-react"
 import { useMemo, useState } from "react"
+import { formatCost } from "@/utils"
 
 interface ServiceRecordCardProps {
   record: ServiceRecord
@@ -77,7 +78,7 @@ const PriceMileage = ({ record }: { record: ServiceRecord }) => (
   <div className="flex items-center gap-4 mt-2">
     <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
       <span className="font-semibold text-green-700">LKR</span>
-      <span>{record.cost.toFixed(2)}</span>
+      <span>{formatCost(record.cost)}</span>
     </div>
     {record.mileage && (
       <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
