@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./config"
-import { fetchWithAuth, getAuthToken } from "./http"
+import { getAuthToken } from "./http"
 import type { ApiResponse, Attachment } from "./types"
 
 const normalizeAttachment = (a: any): Attachment => ({
@@ -11,41 +11,66 @@ const normalizeAttachment = (a: any): Attachment => ({
   uploadedAt: a.UploadedAt ?? a.uploadedAt ?? a.CreatedAt ?? a.createdAt ?? "",
 })
 
+const getHost = () => API_BASE_URL.replace(/\/api\/?$/i, "")
+
+const buildAuthHeaders = () => {
+  const token = getAuthToken()
+  const headers: Record<string, string> = {}
+  if (token) headers["Authorization"] = `Bearer ${token}`
+  return { headers, token }
+}
+
 export function getAttachmentServeUrl(attachmentId: string) {
-  const host = API_BASE_URL.replace(/\/api\/?$/i, "")
-  return `${host}/Attachments/ServeAttachment/${attachmentId}`
+  const host = getHost()
+  // Backend expects query param id and streams inline
+  return `${host}/Attachments/ServeAttachment?id=${encodeURIComponent(attachmentId)}`
 }
 
 export const attachmentsApi = {
   getByRecordId: async (recordId: string): Promise<ApiResponse<Attachment[]>> => {
-    const resp = await fetchWithAuth<any>(`/attachments/getAttachments?recordId=${recordId}`)
-    if (resp.error) return resp
+    const { headers, token } = buildAuthHeaders()
+    if (!token) return { error: "Please sign in to view attachments." }
 
-    const payload: any = resp.data
-    const unwrapped = payload?.Data ?? payload?.data ?? payload ?? []
-    const list: any[] = Array.isArray(unwrapped) ? unwrapped : []
+    try {
+      const response = await fetch(`${getHost()}/Attachments/GetAttachments?recordId=${encodeURIComponent(recordId)}`, {
+        method: "GET",
+        headers,
+      })
 
-    return { data: list.map(normalizeAttachment) }
+      const data = await response.json().catch(() => null)
+      if (!response.ok || (data && data.Success === false)) {
+        const message = data?.Message || data?.message || data?.error || `Error: ${response.status}`
+        return { error: message }
+      }
+
+      const unwrapped = data?.Data ?? data?.data ?? data ?? []
+      const list: any[] = Array.isArray(unwrapped) ? unwrapped : []
+      return { data: list.map(normalizeAttachment) }
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : "Network error" }
+    }
   },
 
   upload: async (recordId: string, files: File[]): Promise<ApiResponse<Attachment[]>> => {
-    const token = getAuthToken()
+    const { headers, token } = buildAuthHeaders()
+    if (!token) return { error: "Please sign in to upload attachments." }
+
     const formData = new FormData()
     files.forEach((file) => formData.append("files", file))
 
     try {
-      const response = await fetch(`${API_BASE_URL}/attachments/uploadAttachments?recordId=${recordId}`, {
+      const response = await fetch(`${getHost()}/Attachments/UploadAttachments?recordId=${encodeURIComponent(recordId)}`, {
         method: "POST",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers,
         body: formData,
       })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: "Upload failed" }))
-        return { error: errorData.message || `Error: ${response.status}` }
+      const data = await response.json().catch(() => null)
+      if (!response.ok || (data && data.Success === false)) {
+        const message = data?.Message || data?.message || data?.error || `Error: ${response.status}`
+        return { error: message }
       }
 
-      const data = await response.json().catch(() => [])
       const unwrapped = data?.Data ?? data?.data ?? data ?? []
       const list: any[] = Array.isArray(unwrapped) ? unwrapped : []
       return { data: list.map(normalizeAttachment) }
@@ -55,18 +80,35 @@ export const attachmentsApi = {
   },
 
   delete: async (attachmentId: string): Promise<ApiResponse<void>> => {
-    return fetchWithAuth<void>(`/attachments/deleteAttachment/${attachmentId}`, {
-      method: "DELETE",
-    })
+    const { headers, token } = buildAuthHeaders()
+    if (!token) return { error: "Please sign in to delete attachments." }
+
+    try {
+      const response = await fetch(`${getHost()}/Attachments/DeleteAttachment?id=${encodeURIComponent(attachmentId)}`, {
+        method: "DELETE",
+        headers,
+      })
+
+      const data = await response.json().catch(() => null)
+      if (!response.ok || (data && data.Success === false)) {
+        const message = data?.Message || data?.message || data?.error || `Error: ${response.status}`
+        return { error: message }
+      }
+      return { data: undefined }
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : "Network error" }
+    }
   },
 
   download: async (attachmentId: string): Promise<ApiResponse<Blob>> => {
-    const token = getAuthToken()
+    const { headers, token } = buildAuthHeaders()
+    if (!token) return { error: "Please sign in to download attachments." }
+
     try {
       const url = getAttachmentServeUrl(attachmentId)
       const response = await fetch(url, {
         method: "GET",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers,
       })
 
       if (!response.ok) {

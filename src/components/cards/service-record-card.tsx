@@ -92,7 +92,7 @@ const PriceMileage = ({ record }: { record: ServiceRecord }) => (
 const Badges = ({ breakdownCount, attachmentCount }: { breakdownCount: number; attachmentCount: number }) => (
   <div className="flex gap-2 flex-wrap mt-2">
     {breakdownCount > 0 && <Badge className="bg-violet-100 text-violet-700 border-0">💰 {breakdownCount} items</Badge>}
-    {attachmentCount > 0 && <Badge className="bg-purple-200 text-purple-700 border-0">📎 {attachmentCount} files</Badge>}
+    <Badge className="bg-purple-200 text-purple-700 border-0">📎 {attachmentCount} files</Badge>
   </div>
 )
 
@@ -109,7 +109,6 @@ const FooterActions = ({
   onViewBreakdown?: (recordId: string) => void
   onViewAttachments?: (recordId: string) => void
 }) => {
-  if (breakdownCount === 0 && attachmentCount === 0) return null
   return (
     <CardFooter className="p-4 pt-2 flex gap-4">
       {breakdownCount > 0 && (
@@ -122,16 +121,15 @@ const FooterActions = ({
           Breakdown
         </Button>
       )}
-      {attachmentCount > 0 && (
-        <Button
-          variant="outline"
-          className="flex-1 rounded-xl border-slate-300 text-slate-700 hover:bg-violet-600 hover:text-white transition-all duration-300"
-          onClick={() => onViewAttachments?.(record.recordId!)}
-        >
-          <Paperclip className="w-4 h-4 mr-2" />
-          Attachments
-        </Button>
-      )}
+      <Button
+        variant="outline"
+        className="flex-1 rounded-xl border-slate-300 text-slate-700 hover:bg-violet-600 hover:text-white transition-all duration-300"
+        onClick={() => onViewAttachments?.(record.recordId!)}
+        disabled={!attachmentCount && !onViewAttachments}
+      >
+        <Paperclip className="w-4 h-4 mr-2" />
+        Attachments
+      </Button>
     </CardFooter>
   )
 }
