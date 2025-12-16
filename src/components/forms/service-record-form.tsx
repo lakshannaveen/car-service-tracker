@@ -68,18 +68,13 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
     quantity: 1,
     unitPrice: 0,
   })
-  const [manualCostOverride, setManualCostOverride] = useState<number | null>(record?.cost || null)
-
   const totalBreakdownCost = costBreakdowns.reduce((sum, b) => sum + (b.totalPrice || 0), 0)
-  
-  // Auto-update total cost when breakdown items change
-  useEffect(() => {
-    if (costBreakdowns.length > 0) {
-      setManualCostOverride(totalBreakdownCost)
-    }
-  }, [totalBreakdownCost, costBreakdowns.length])
-
-  const displayedCost = manualCostOverride !== null ? manualCostOverride : (costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost)
+  const derivedTotalCost =
+    costBreakdowns.length > 0
+      ? totalBreakdownCost
+      : record?.cost !== undefined
+        ? record.cost
+        : formData.cost || 0
 
   const handleAddBreakdown = (e: React.FormEvent) => {
     e.preventDefault()
@@ -151,7 +146,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
     const submitData: ServiceRecord = {
       ...formData,
       costBreakdowns: costBreakdowns.length > 0 ? costBreakdowns : undefined,
-      cost: manualCostOverride !== null ? manualCostOverride : (costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost),
+      cost: derivedTotalCost,
     }
 
     await onSubmit(submitData, files)
@@ -179,12 +174,8 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
       />
 
       <TotalCostField 
-        displayedCost={displayedCost} 
+        displayedCost={derivedTotalCost} 
         isLoading={isLoading}
-        onChange={(value) => {
-          setManualCostOverride(value)
-          setFormData({ ...formData, cost: value })
-        }}
         hasBreakdowns={costBreakdowns.length > 0}
       />
 
@@ -215,7 +206,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
         onEditBreakdown={handleEditBreakdown}
         onDeleteBreakdown={handleDeleteBreakdown}
         isLoading={isLoading}
-        totalCost={manualCostOverride !== null ? manualCostOverride : undefined}
+        totalCost={derivedTotalCost}
       />
 
       {/* Attachments */}
