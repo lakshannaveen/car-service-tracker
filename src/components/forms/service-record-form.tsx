@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { ServiceRecord, CostBreakdown } from "@/services"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -68,9 +68,18 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
     quantity: 1,
     unitPrice: 0,
   })
+  const [manualCostOverride, setManualCostOverride] = useState<number | null>(record?.cost || null)
 
   const totalBreakdownCost = costBreakdowns.reduce((sum, b) => sum + (b.totalPrice || 0), 0)
-  const displayedCost = costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost
+  
+  // Auto-update total cost when breakdown items change
+  useEffect(() => {
+    if (costBreakdowns.length > 0) {
+      setManualCostOverride(totalBreakdownCost)
+    }
+  }, [totalBreakdownCost, costBreakdowns.length])
+
+  const displayedCost = manualCostOverride !== null ? manualCostOverride : (costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost)
 
   const handleAddBreakdown = (e: React.FormEvent) => {
     e.preventDefault()
@@ -142,7 +151,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
     const submitData: ServiceRecord = {
       ...formData,
       costBreakdowns: costBreakdowns.length > 0 ? costBreakdowns : undefined,
-      cost: costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost,
+      cost: manualCostOverride !== null ? manualCostOverride : (costBreakdowns.length > 0 ? totalBreakdownCost : formData.cost),
     }
 
     await onSubmit(submitData, files)
@@ -169,7 +178,15 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
         onProviderNameChange={(name) => setFormData({ ...formData, providerName: name })}
       />
 
-      <TotalCostField displayedCost={displayedCost} isLoading={isLoading} />
+      <TotalCostField 
+        displayedCost={displayedCost} 
+        isLoading={isLoading}
+        onChange={(value) => {
+          setManualCostOverride(value)
+          setFormData({ ...formData, cost: value })
+        }}
+        hasBreakdowns={costBreakdowns.length > 0}
+      />
 
       {/* Description */}
       <div className="space-y-3">
@@ -198,6 +215,7 @@ export function ServiceRecordForm({ vehicleId, vehicleDetails, record, onSubmit,
         onEditBreakdown={handleEditBreakdown}
         onDeleteBreakdown={handleDeleteBreakdown}
         isLoading={isLoading}
+        totalCost={manualCostOverride !== null ? manualCostOverride : undefined}
       />
 
       {/* Attachments */}

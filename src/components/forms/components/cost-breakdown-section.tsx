@@ -28,6 +28,7 @@ interface CostBreakdownSectionProps {
   onEditBreakdown: (index: number) => void
   onDeleteBreakdown: (index: number) => void
   isLoading: boolean
+  totalCost?: number
 }
 
 const categoryStyles: Record<string, string> = {
@@ -37,12 +38,22 @@ const categoryStyles: Record<string, string> = {
   Other: "border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-900 dark:bg-gray-900/20 dark:text-gray-300",
 }
 
-const TotalBreakdownCost = ({ breakdowns }: { breakdowns: CostBreakdown[] }) => {
+const TotalBreakdownCost = ({ breakdowns, manualTotal }: { breakdowns: CostBreakdown[], manualTotal?: number }) => {
   const total = breakdowns.reduce((sum, b) => sum + (b.totalPrice || 0), 0)
+  const showComparison = manualTotal !== undefined && manualTotal !== total
+  
   return (
-    <div className="flex items-center justify-between bg-linear-to-r from-primary/5 to-primary/10 p-4 rounded-lg border-2 border-primary/10">
-      <span className="font-semibold text-lg">Total:</span>
-      <span className="text-xl font-bold text-primary">{formatCost(total)}</span>
+    <div className="space-y-3">
+      <div className="flex items-center justify-between bg-linear-to-r from-primary/5 to-primary/10 p-4 rounded-lg border-2 border-primary/10">
+        <span className="font-semibold text-lg">Breakdown Total:</span>
+        <span className="text-xl font-bold text-primary">{formatCost(total)}</span>
+      </div>
+      {showComparison && (
+        <div className="flex items-center justify-between bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 p-4 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+          <span className="font-semibold text-lg text-blue-900 dark:text-blue-100">Final Total Cost:</span>
+          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">{formatCost(manualTotal)}</span>
+        </div>
+      )}
     </div>
   )
 }
@@ -68,6 +79,7 @@ export function CostBreakdownSection({
   onEditBreakdown,
   onDeleteBreakdown,
   isLoading,
+  totalCost,
 }: CostBreakdownSectionProps) {
   return (
     <Card className="border-2 border-muted/50 bg-linear-to-br from-background to-muted/5">
@@ -163,7 +175,7 @@ export function CostBreakdownSection({
             ))}
           </div>
 
-          <TotalBreakdownCost breakdowns={costBreakdowns} />
+          <TotalBreakdownCost breakdowns={costBreakdowns} manualTotal={totalCost} />
         </CardContent>
       ) : (
         <CardContent>
