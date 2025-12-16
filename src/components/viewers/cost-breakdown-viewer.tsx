@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { X } from "lucide-react"
 import { useEffect } from "react"
+import { formatCost } from "@/utils"
 
 interface CostBreakdownModalProps {
   breakdowns: CostBreakdown[]
@@ -89,10 +90,10 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
                           <TableCell className="py-2 text-right">{b.quantity}</TableCell>
                           <TableCell className="py-2 text-right">
                             {/* Guard in case unitPrice is undefined */}
-                            {typeof b.unitPrice === "number" ? b.unitPrice.toFixed(2) : "-"}
+                            {typeof b.unitPrice === "number" ? formatCost(b.unitPrice) : "-"}
                           </TableCell>
                           <TableCell className="py-2 text-right font-semibold">
-                            LKR {(b.totalPrice || 0).toFixed(2)}
+                            LKR {formatCost(b.totalPrice || 0)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -108,7 +109,7 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
                         <Badge variant="outline" className={categoryColors[category] || ""}>
                           {category}
                         </Badge>
-                        <span className="font-medium">LKR {total.toFixed(2)}</span>
+                        <span className="font-medium">LKR {formatCost(total)}</span>
                       </div>
                     ))}
                   </div>
@@ -118,12 +119,12 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
 
                 <div className="flex items-center justify-between bg-muted/50 p-3 rounded-lg">
                   <span className="font-semibold">Total Cost</span>
-                  <span className="text-lg font-bold">LKR {breakdownTotal.toFixed(2)}</span>
+                  <span className="text-lg font-bold">LKR {formatCost(breakdownTotal)}</span>
                 </div>
 
                 {totalCost !== undefined && Math.abs(breakdownTotal - totalCost) > 0.01 && (
                   <div className="text-xs text-amber-600 dark:text-amber-400">
-                    Note: Breakdown total (LKR {breakdownTotal.toFixed(2)}) differs from recorded total (LKR {totalCost.toFixed(2)})
+                    Note: Breakdown total (LKR {formatCost(breakdownTotal)}) differs from recorded total (LKR {formatCost(totalCost)})
                   </div>
                 )}
               </>
