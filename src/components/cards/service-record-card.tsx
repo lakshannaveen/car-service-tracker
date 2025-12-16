@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Wrench, MoreVertical, Paperclip, Gauge, Receipt } from "lucide-react"
+import { Wrench, MoreVertical, Paperclip, Gauge, Banknote } from "lucide-react"
 import { useMemo, useState } from "react"
 
 interface ServiceRecordCardProps {
@@ -117,7 +117,7 @@ const FooterActions = ({
           className="flex-1 rounded-xl border-violet-300 text-violet-700 hover:bg-violet-600 hover:text-white transition-all duration-300"
           onClick={() => onViewBreakdown?.(record.recordId!)}
         >
-          <Receipt className="w-4 h-4 mr-2" />
+          <Banknote className="w-4 h-4 mr-2" />
           Breakdown
         </Button>
       )}

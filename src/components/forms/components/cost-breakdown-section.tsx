@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Receipt, Edit, Trash2 } from "lucide-react"
+import { Banknote, Edit, Trash2 } from "lucide-react"
 import { CostBreakdownCard } from "@/components/cards"
 import { BreakdownDialog } from "./breakdown-dialog"
 import { formatCost } from "@/utils"
@@ -50,7 +50,7 @@ const TotalBreakdownCost = ({ breakdowns }: { breakdowns: CostBreakdown[] }) => 
 const EmptyState = () => (
   <div className="text-center py-8">
     <div className="flex flex-col items-center space-y-3 text-muted-foreground">
-      <Receipt className="w-12 h-12 opacity-40" />
+      <Banknote className="w-12 h-12 opacity-40" />
       <p className="font-medium">No cost items added</p>
       <p className="text-sm">Click "Add Item" to break down the service costs</p>
     </div>
@@ -75,7 +75,7 @@ export function CostBreakdownSection({
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-primary" />
+              <Banknote className="w-5 h-5 text-primary" />
               Cost Breakdown
             </CardTitle>
             <CardDescription>Itemize your service costs for better tracking</CardDescription>
