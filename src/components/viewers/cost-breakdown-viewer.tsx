@@ -117,16 +117,33 @@ export function CostBreakdownModal({ breakdowns, totalCost, isOpen, onClose }: C
 
                 <Separator />
 
-                <div className="flex items-center justify-between bg-muted/50 p-3 rounded-lg">
-                  <span className="font-semibold">Total Cost</span>
-                  <span className="text-lg font-bold">LKR {formatCost(breakdownTotal)}</span>
-                </div>
-
-                {totalCost !== undefined && Math.abs(breakdownTotal - totalCost) > 0.01 && (
-                  <div className="text-xs text-amber-600 dark:text-amber-400">
-                    Note: Breakdown total (LKR {formatCost(breakdownTotal)}) differs from recorded total (LKR {formatCost(totalCost)})
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between bg-muted/50 p-3 rounded-lg">
+                    <span className="font-semibold">Breakdown Total</span>
+                    <span className="text-lg font-bold">LKR {formatCost(breakdownTotal)}</span>
                   </div>
-                )}
+
+                  {totalCost !== undefined && Math.abs(breakdownTotal - totalCost) > 0.01 && (
+                    <>
+                      <div className="flex items-center justify-between bg-amber-50 dark:bg-amber-950 p-3 rounded-lg border-2 border-amber-200 dark:border-amber-800">
+                        <span className="font-semibold text-amber-900 dark:text-amber-100">Additional Fees</span>
+                        <span className="text-lg font-bold text-amber-700 dark:text-amber-300">LKR {formatCost(totalCost - breakdownTotal)}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-200 dark:border-green-800">
+                        <span className="font-bold text-green-900 dark:text-green-100">Final Total Cost</span>
+                        <span className="text-xl font-bold text-green-700 dark:text-green-300">LKR {formatCost(totalCost)}</span>
+                      </div>
+                    </>
+                  )}
+
+                  {totalCost === undefined || Math.abs(breakdownTotal - totalCost) <= 0.01 && (
+                    <div className="flex items-center justify-between bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-200 dark:border-green-800">
+                      <span className="font-bold text-green-900 dark:text-green-100">Total Cost</span>
+                      <span className="text-xl font-bold text-green-700 dark:text-green-300">LKR {formatCost(breakdownTotal)}</span>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </CardContent>
