@@ -1,6 +1,7 @@
 import type React from "react"
 
 import { useState, useRef } from "react"
+import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { X, Upload, File, ImageIcon } from "lucide-react"
@@ -13,9 +14,11 @@ interface FileUploadProps {
   acceptedTypes?: string[]
 }
 
+
 export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { toast } = useToast();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
@@ -56,7 +59,11 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
       return allowedTypes.includes(file.type) && allowedExtensions.includes(ext);
     });
     if (validFiles.length < filesToAdd.length) {
-      alert("Only jpg, jpeg, and png files are allowed.");
+      toast({
+        title: "Invalid file type",
+        description: "Only jpg, jpeg, and png files are allowed.",
+        variant: "destructive",
+      });
     }
     onFilesChange([...files, ...validFiles])
   }
