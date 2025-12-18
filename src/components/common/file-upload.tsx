@@ -46,20 +46,19 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
     const remainingSlots = maxFiles - files.length
     const filesToAdd = newFiles.slice(0, remainingSlots)
 
-    if (acceptedTypes && acceptedTypes.length > 0) {
-      const validFiles = filesToAdd.filter((file) =>
-        acceptedTypes.some((type) => {
-          if (type.endsWith("/*")) {
-            const category = type.split("/")[0]
-            return file.type.startsWith(category + "/")
-          }
-          return file.type === type
-        }),
-      )
-      onFilesChange([...files, ...validFiles])
-    } else {
-      onFilesChange([...files, ...filesToAdd])
+    // Only allow jpg, jpeg, png
+    const allowedTypes = [
+      "image/jpeg", "image/png"
+    ];
+    const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    const validFiles = filesToAdd.filter((file) => {
+      const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      return allowedTypes.includes(file.type) && allowedExtensions.includes(ext);
+    });
+    if (validFiles.length < filesToAdd.length) {
+      alert("Only jpg, jpeg, and png files are allowed.");
     }
+    onFilesChange([...files, ...validFiles])
   }
 
   const removeFile = (index: number) => {

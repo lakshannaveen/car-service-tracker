@@ -25,6 +25,8 @@ export function AttachmentViewer({ attachments, onDelete }: AttachmentViewerProp
     return imageExtensions.some((ext) => fileName.toLowerCase().endsWith(ext))
   }
 
+  const isPdf = (fileName: string) => fileName.toLowerCase().endsWith('.pdf');
+
   const handleOpenPreview = async (attachment: Attachment) => {
     // If backend exposes a serve endpoint that requires auth, fetch the file with the auth header
     if (attachment.attachmentId) {
@@ -106,6 +108,18 @@ export function AttachmentViewer({ attachments, onDelete }: AttachmentViewerProp
                     <ImageIcon className="w-3 h-3 mr-1" />
                     View
                   </Button>
+                )}
+                {isPdf(attachment.fileName) && (
+                  <a
+                    href={getAttachmentServeUrl(attachment.attachmentId)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="ghost" size="sm" className="h-7 text-xs">
+                      <File className="w-3 h-3 mr-1" />
+                      Download PDF
+                    </Button>
+                  </a>
                 )}
                 {onDelete && (
                   <Button

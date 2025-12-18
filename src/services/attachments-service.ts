@@ -55,6 +55,19 @@ export const attachmentsApi = {
     const { headers, token } = buildAuthHeaders()
     if (!token) return { error: "Please sign in to upload attachments." }
 
+    // Only allow jpg, jpeg, png
+    const allowedTypes = [
+      "image/jpeg", "image/png"
+    ];
+    const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    const invalidFiles = files.filter(file => {
+      const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      return !allowedTypes.includes(file.type) || !allowedExtensions.includes(ext);
+    });
+    if (invalidFiles.length > 0) {
+      return { error: "Only jpg, jpeg, and png files are allowed." };
+    }
+
     const formData = new FormData()
     files.forEach((file) => formData.append("files", file))
 
