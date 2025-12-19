@@ -101,7 +101,7 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
             {isDragging ? "Drop files here" : "Click to upload or drag and drop"}
           </p>
           <p className="text-xs text-muted-foreground">
-            {acceptedTypes ? `Accepted: ${acceptedTypes.join(", ")}` : "Images, PDFs, and documents"}
+              {acceptedTypes ? `Accepted: ${acceptedTypes.join(", ")}` : "Images and documents"}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             {files.length} / {maxFiles} files selected
