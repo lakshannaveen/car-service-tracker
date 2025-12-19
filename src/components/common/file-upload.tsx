@@ -49,19 +49,29 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
     const remainingSlots = maxFiles - files.length
     const filesToAdd = newFiles.slice(0, remainingSlots)
 
-    // Only allow jpg, jpeg, png
+    // Only allow jpg, jpeg, png, and block tricky extensions
     const allowedTypes = [
       "image/jpeg", "image/png"
     ];
     const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    // Regex: only allow .jpg, .jpeg, .png at end, no extra dots or chars after
+    const validExtensionRegex = /^.*\.(jpg|jpeg|png)$/i;
+    // Block extensions like j.epg, p...n, etc.
     const validFiles = filesToAdd.filter((file) => {
       const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-      return allowedTypes.includes(file.type) && allowedExtensions.includes(ext);
+      // Only allow if matches regex and is in allowedExtensions
+      return (
+        allowedTypes.includes(file.type) &&
+        allowedExtensions.includes(ext) &&
+        validExtensionRegex.test(file.name) &&
+        // Block if there are extra dots in the extension part (e.g., p...n)
+        !/\.[^.]*\.{2,}[^.]*$/.test(file.name)
+      );
     });
     if (validFiles.length < filesToAdd.length) {
       toast({
         title: "Invalid file type",
-        description: "Only jpg, jpeg, and png files are allowed.",
+        description: "Only .jpg, .jpeg, and .png files are allowed.",
         variant: "destructive",
       });
     }
