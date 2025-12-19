@@ -89,6 +89,7 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
         className={cn(
           "border-2 border-dashed transition-colors cursor-pointer",
           isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50",
+          "w-full max-w-xl mx-auto"
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -96,63 +97,63 @@ export function FileUpload({ files, onFilesChange, maxFiles = 10, acceptedTypes 
         onClick={() => fileInputRef.current?.click()}
       >
         <div className="p-4 text-center">
-          <Upload className="w-12 h-12 mx-auto mb-3 text-muted-foreground" /> {/* mb-3 for a bit less space */}
+          <Upload className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
           <p className="text-sm font-medium mb-1">
             {isDragging ? "Drop files here" : "Click to upload or drag and drop"}
           </p>
           <p className="text-xs text-muted-foreground">
-              {acceptedTypes ? `Accepted: ${acceptedTypes.join(", ")}` : "Images and documents"}
+            {acceptedTypes ? `Accepted: ${acceptedTypes.join(", ")}` : "Images and documents"}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             {files.length} / {maxFiles} files selected
           </p>
         </div>
-      </Card>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        accept={acceptedTypes?.join(",")}
-        onChange={handleFileSelect}
-        className="hidden"
-      />
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept={acceptedTypes?.join(",")}
+          onChange={handleFileSelect}
+          className="hidden"
+        />
 
-      {files.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Selected Files ({files.length})</p>
-          <div className="grid gap-2">
-            {files.map((file, index) => (
-              <Card key={index} className="p-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded flex items-center justify-center shrink-0">
-                    {isImage(file) ? (
-                      <ImageIcon className="w-5 h-5 text-primary" />
-                    ) : (
-                      <File className="w-5 h-5 text-primary" />
-                    )}
+        {files.length > 0 && (
+          <div className="space-y-2 mt-4">
+            <p className="text-sm font-medium">Selected Files ({files.length})</p>
+            <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
+              {files.map((file, index) => (
+                <Card key={index} className="p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded flex items-center justify-center shrink-0">
+                      {isImage(file) ? (
+                        <ImageIcon className="w-5 h-5 text-primary" />
+                      ) : (
+                        <File className="w-5 h-5 text-primary" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{file.name}</p>
+                      <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        removeFile(index)
+                      }}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{file.name}</p>
-                    <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeFile(index)
-                    }}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Card>
     </div>
   )
 }
